@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
+	fileCtrl "github.com/JesseNicholas00/GogoManager/controllers/file"
+	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
@@ -36,6 +38,15 @@ func initControllers(
 	)
 	authController := authCtrl.NewAuthController(authService)
 	ctrls = append(ctrls, authController)
+
+	userMw := middlewares.NewAuthMiddleware(authService)
+
+	imageController := fileCtrl.NewImageController(
+		uploader,
+		cfg.awsS3BucketName,
+		userMw,
+	)
+	ctrls = append(ctrls, imageController)
 
 	return
 }
