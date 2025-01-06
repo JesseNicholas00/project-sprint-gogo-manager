@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func NewWithTestDatabase(t *testing.T) department.Repository {
+func NewWithTestDatabase(t *testing.T) department.DepartmentRepository {
 	db := unittesting.SetupTestDatabase("../../migrations", t)
-	return department.NewRepository(ctxrizz.NewDbContextRizzer(db))
+	return department.NewDepartmentRepository(ctxrizz.NewDbContextRizzer(db))
 }

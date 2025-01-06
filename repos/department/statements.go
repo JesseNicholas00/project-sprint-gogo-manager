@@ -12,9 +12,8 @@ type statements struct {
 func prepareStatements() statements {
 	return statements{
 		add: statementutil.MustPrepareNamed(`
-			INSERT INTO departments (id, name, manager_id)
-			VALUES (:id, :name, :manager_id)
-			RETURNING id, name, manager_id;
+			INSERT INTO departments (department_id, name, manager_id)
+			VALUES (:id, :name, :manager_id);
 		`),
 	}
 }

@@ -2,13 +2,13 @@ package department
 
 import "github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 
-type repositoryImpl struct {
+type departmentRepositoryImpl struct {
 	dbRizzer   ctxrizz.DbContextRizzer
 	statements statements
 }
 
-func NewRepository(dbRizzer ctxrizz.DbContextRizzer) Repository {
-	return &repositoryImpl{
+func NewDepartmentRepository(dbRizzer ctxrizz.DbContextRizzer) DepartmentRepository {
+	return &departmentRepositoryImpl{
 		dbRizzer:   dbRizzer,
 		statements: prepareStatements(),
 	}

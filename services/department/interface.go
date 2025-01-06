@@ -5,6 +5,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Service interface {
+type DepartmentService interface {
 	AddDepartment(ctx context.Context, req AddDepartmentReq, res *AddDepartmentRes, managerId uuid.UUID) error
 }

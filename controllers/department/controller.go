@@ -8,7 +8,7 @@ import (
 )
 
 type controller struct {
-	service department.Service
+	service department.DepartmentService
 	authMw  middlewares.Middleware
 }
 
@@ -20,8 +20,8 @@ func (c *controller) Register(server *echo.Echo) error {
 	return nil
 }
 
-func NewController(
-	service department.Service,
+func NewDepartmentController(
+	service department.DepartmentService,
 	authMw middlewares.Middleware,
 ) controllers.Controller {
 	return &controller{

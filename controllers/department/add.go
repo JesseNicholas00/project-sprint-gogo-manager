@@ -16,12 +16,9 @@ func (c *controller) addDepartment(ctx echo.Context) error {
 		return err
 	}
 
-	user, ok := ctx.Get("session").(auth.GetSessionFromTokenRes)
-	if !ok {
-		return errorutil.AddCurrentContext(nil, "failed to get user from context")
-	}
+	userId := ctx.Get("session").(auth.GetSessionFromTokenRes).UserId
 
-	managerId, err := uuid.Parse(user.UserId)
+	managerId, err := uuid.Parse(userId)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
