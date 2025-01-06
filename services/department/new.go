@@ -6,7 +6,7 @@ import (
 )
 
 type serviceImpl struct {
-	repo department.Repository
+	repo     department.Repository
 	dbRizzer ctxrizz.DbContextRizzer
 }
 
@@ -15,7 +15,7 @@ func NewService(
 	dbRizzer ctxrizz.DbContextRizzer,
 ) Service {
 	return &serviceImpl{
-		repo: repo,
+		repo:     repo,
 		dbRizzer: dbRizzer,
 	}
 }

@@ -19,7 +19,7 @@ func (s *serviceImpl) AddDepartment(ctx context.Context, req AddDepartmentReq, r
 	}
 
 	created, err := s.repo.AddDepartment(ctx, department.Department{
-		Id: id,
+		Id:   id,
 		Name: req.Name,
 	})
 	if err != nil {
