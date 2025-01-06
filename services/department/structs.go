@@ -10,3 +10,11 @@ type AddDepartmentRes struct {
 	DepartmentId uuid.UUID `json:"departmentId"`
 	Name         string    `json:"name"`
 }
+
+type GetDepartmentParams struct {
+	Limit  *uint  `query:"limit"`
+	Offset *uint  `query:"offset"`
+	Name   string `query:"name"`
+}
+
+type GetDepartmentRes []AddDepartmentRes

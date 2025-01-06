@@ -6,7 +6,9 @@ import (
 )
 
 type statements struct {
-	add *sqlx.NamedStmt
+	add          *sqlx.NamedStmt
+	get          *sqlx.NamedStmt
+	searchByName *sqlx.NamedStmt
 }
 
 func prepareStatements() statements {
@@ -14,6 +16,19 @@ func prepareStatements() statements {
 		add: statementutil.MustPrepareNamed(`
 			INSERT INTO departments (department_id, name, manager_id)
 			VALUES (:department_id, :name, :manager_id);
+		`),
+		get: statementutil.MustPrepareNamed(`
+			SELECT id, name 
+			FROM departments 
+			ORDER BY id
+			LIMIT :limit OFFSET :offset;
+		`),
+		searchByName: statementutil.MustPrepareNamed(`
+			SELECT id, name 
+			FROM departments
+			WHERE name ILIKE :name
+			ORDER BY id
+			LIMIT :limit OFFSET :offset;
 		`),
 	}
 }
