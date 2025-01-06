@@ -3,8 +3,12 @@ package main
 import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
+	employeeCtrl "github.com/JesseNicholas00/GogoManager/controllers/employee"
+	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
+	employeeRepo "github.com/JesseNicholas00/GogoManager/repos/employee"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
+	employeeSvc "github.com/JesseNicholas00/GogoManager/services/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 	"github.com/JesseNicholas00/GogoManager/utils/logging"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -36,6 +40,12 @@ func initControllers(
 	)
 	authController := authCtrl.NewAuthController(authService)
 	ctrls = append(ctrls, authController)
+
+	employeeRepository := employeeRepo.NewRepository(dbRizzer)
+	employeeService := employeeSvc.NewService(employeeRepository, dbRizzer)
+	employeeMw := middlewares.NewAuthMiddleware(authService)
+	employeeController := employeeCtrl.NewEmployeeController(employeeService, employeeMw)
+	ctrls = append(ctrls, employeeController)
 
 	return
 }

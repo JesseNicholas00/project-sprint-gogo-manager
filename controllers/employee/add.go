@@ -21,5 +21,5 @@ func (c *employeeController) addEmployee(ctx echo.Context) error {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	return ctx.JSON(http.StatusOK, res)
+	return ctx.JSON(http.StatusCreated, res)
 }

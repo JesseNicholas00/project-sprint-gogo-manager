@@ -12,9 +12,9 @@ type statements struct {
 func prepareStatements() statements {
 	return statements{
 		add: statementutil.MustPrepareNamed(`
-			INSERT INTO employees (id, identity_number, name, employee_image_uri, gender, department_id)
-			VALUES (:id, :identity_number, :name, :employee_image_uri, :gender, :department_id)
-			RETURNING id, identity_number, name, employee_image_uri, gender, department_id
+			INSERT INTO employees (identity_number, name, employee_image_uri, gender, department_id)
+			VALUES (:identity_number, :name, :employee_image_uri, :gender, :department_id)
+			RETURNING identity_number, name, employee_image_uri, gender, department_id
 		`),
 	}
 }
