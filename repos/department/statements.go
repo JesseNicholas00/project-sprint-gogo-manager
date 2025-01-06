@@ -32,5 +32,18 @@ func prepareStatements() statements {
 			ORDER BY department_id
 			LIMIT :limit OFFSET :offset;
 		`),
+		get: statementutil.MustPrepareNamed(`
+			SELECT id, name 
+			FROM departments 
+			ORDER BY id
+			LIMIT :limit OFFSET :offset;
+		`),
+		searchByName: statementutil.MustPrepareNamed(`
+			SELECT id, name 
+			FROM departments
+			WHERE name ILIKE :name
+			ORDER BY id
+			LIMIT :limit OFFSET :offset;
+		`),
 	}
 }
