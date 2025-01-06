@@ -18,3 +18,7 @@ type GetDepartmentParams struct {
 }
 
 type GetDepartmentRes []AddDepartmentRes
+
+type DeleteDepartmentReq struct {
+	DepartmentId uuid.UUID `param:"departmentId"`
+}

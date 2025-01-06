@@ -9,6 +9,7 @@ type statements struct {
 	add          *sqlx.NamedStmt
 	get          *sqlx.NamedStmt
 	searchByName *sqlx.NamedStmt
+	delete       *sqlx.NamedStmt
 }
 
 func prepareStatements() statements {
@@ -46,6 +47,11 @@ func prepareStatements() statements {
 			    AND name ILIKE :name
 			ORDER BY id
 			LIMIT :limit OFFSET :offset;
+		`),
+		delete: statementutil.MustPrepareNamed(`
+			DELETE FROM departments 
+			WHERE manager_id = :manager_id
+			    AND id = :id;
 		`),
 	}
 }
