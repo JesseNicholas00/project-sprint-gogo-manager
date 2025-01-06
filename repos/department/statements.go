@@ -19,14 +19,16 @@ func prepareStatements() statements {
 		`),
 		get: statementutil.MustPrepareNamed(`
 			SELECT id, name 
-			FROM departments 
+			FROM departments
+			WHERE manager_id = :manager_id
 			ORDER BY id
 			LIMIT :limit OFFSET :offset;
 		`),
 		searchByName: statementutil.MustPrepareNamed(`
 			SELECT id, name 
 			FROM departments
-			WHERE name ILIKE :name
+			WHERE manager_id = :manager_id
+			    AND name ILIKE :name
 			ORDER BY id
 			LIMIT :limit OFFSET :offset;
 		`),
