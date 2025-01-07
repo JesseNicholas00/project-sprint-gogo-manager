@@ -7,3 +7,10 @@ type Department struct {
 	Name      string    `db:"name"`
 	ManagerId uuid.UUID `db:"manager_id"`
 }
+
+type FilterDepartment struct {
+	Limit     int       `db:"limit"`
+	Offset    int       `db:"offset"`
+	Name      string    `db:"name"`
+	ManagerId uuid.UUID `db:"manager_id"`
+}
