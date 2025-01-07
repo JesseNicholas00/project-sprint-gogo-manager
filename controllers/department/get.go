@@ -10,35 +10,32 @@ import (
 	"net/http"
 )
 
-func (c *controller) getDepartment(ctx echo.Context) error {
+func (ctrl *departmentController) getDepartment(ctx echo.Context) error {
 	req := department.GetDepartmentParams{}
 	if err := request.BindAndValidate(ctx, &req); err != nil {
 		return err
 	}
 
-	if req.Limit == nil {
-		req.Limit = new(uint)
+	if req.Limit == nil || *req.Limit < 0 {
+		req.Limit = new(int)
 		*req.Limit = 5
 	}
 
-	if req.Offset == nil {
-		req.Offset = new(uint)
+	if req.Offset == nil || *req.Offset < 0 {
+		req.Offset = new(int)
 		*req.Offset = 0
 	}
 
-	user, ok := ctx.Get("session").(auth.GetSessionFromTokenRes)
-	if !ok {
-		return errorutil.AddCurrentContext(nil, "failed to get user from context")
-	}
+	userId := ctx.Get("session").(auth.GetSessionFromTokenRes).UserId
 
-	managerId, err := uuid.Parse(user.UserId)
+	managerId, err := uuid.Parse(userId)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
 	res := department.GetDepartmentRes{}
 
-	if err := c.service.GetDepartment(ctx.Request().Context(), req, &res, managerId); err != nil {
+	if err := ctrl.service.GetDepartment(ctx.Request().Context(), req, &res, managerId); err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 

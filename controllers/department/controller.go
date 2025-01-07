@@ -13,10 +13,10 @@ type departmentController struct {
 }
 
 func (ctrl *departmentController) Register(server *echo.Echo) error {
-	g := server.Group("/v1/department")
+	g := server.Group("/v1/department", ctrl.authMw.Process) // Protected routes
 
-	g.POST("", ctrl.addDepartment, ctrl.authMw.Process)
-	g.GET("", ctrl.getDepartment, ctrl.authMw.Process)
+	g.POST("", ctrl.addDepartment)
+	g.GET("", ctrl.getDepartment)
 
 	return nil
 }

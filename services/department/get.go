@@ -7,12 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *serviceImpl) GetDepartment(ctx context.Context, params GetDepartmentParams, res *GetDepartmentRes, managerId uuid.UUID) error {
+func (svc *departmentServiceImpl) GetDepartment(ctx context.Context, params GetDepartmentParams, res *GetDepartmentRes, managerId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 
-	departments, err := s.repo.GetDepartment(ctx, department.FilterDepartment{
+	departments, err := svc.repo.GetDepartment(ctx, department.FilterDepartment{
 		Limit:     *params.Limit,
 		Offset:    *params.Offset,
 		Name:      params.Name,
@@ -22,10 +22,10 @@ func (s *serviceImpl) GetDepartment(ctx context.Context, params GetDepartmentPar
 		return errorutil.AddCurrentContext(err)
 	}
 
-	for _, d := range departments {
+	for _, department := range departments {
 		*res = append(*res, AddDepartmentRes{
-			DepartmentId: d.Id,
-			Name:         d.Name,
+			DepartmentId: department.Id,
+			Name:         department.Name,
 		})
 	}
 

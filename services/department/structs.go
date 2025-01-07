@@ -12,8 +12,8 @@ type AddDepartmentRes struct {
 }
 
 type GetDepartmentParams struct {
-	Limit  *uint  `query:"limit"`
-	Offset *uint  `query:"offset"`
+	Limit  *int   `query:"limit"`
+	Offset *int   `query:"offset"`
 	Name   string `query:"name"`
 }
 
