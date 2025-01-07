@@ -38,13 +38,13 @@ func initControllers(
 		cfg.jwtSecretKey,
 		cfg.bcryptSaltCost,
 	)
-	authController := authCtrl.NewAuthController(authService)
+	authMw := middlewares.NewAuthMiddleware(authService)
+	authController := authCtrl.NewAuthController(authService, authMw)
 	ctrls = append(ctrls, authController)
 
 	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
 	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
-	departmentMw := middlewares.NewAuthMiddleware(authService)
-	departmentController := departmentCtrl.NewDepartmentController(departmentService, departmentMw)
+	departmentController := departmentCtrl.NewDepartmentController(departmentService, authMw)
 	ctrls = append(ctrls, departmentController)
 
 	return
