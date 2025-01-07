@@ -3,8 +3,12 @@ package main
 import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
+	departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
+	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
+	departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
+	departmentSvc "github.com/JesseNicholas00/GogoManager/services/department"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 	"github.com/JesseNicholas00/GogoManager/utils/logging"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -36,6 +40,12 @@ func initControllers(
 	)
 	authController := authCtrl.NewAuthController(authService)
 	ctrls = append(ctrls, authController)
+
+	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
+	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
+	departmentMw := middlewares.NewAuthMiddleware(authService)
+	departmentController := departmentCtrl.NewDepartmentController(departmentService, departmentMw)
+	ctrls = append(ctrls, departmentController)
 
 	return
 }
