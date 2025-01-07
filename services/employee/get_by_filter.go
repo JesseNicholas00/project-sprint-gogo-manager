@@ -15,10 +15,11 @@ func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params G
 	}
 
 	employees, err := e.repo.GetEmployeeByFilters(ctx, employee.FilterEmployee{
-		Limit:  *params.Limit,
-		Offset: *params.Offset,
-		Name:   params.Name,
-		UserId: userId,
+		Limit:         *params.Limit,
+		Offset:        *params.Offset,
+		Name:          params.Name,
+		DepartementId: *params.DepartementId,
+		UserId:        userId,
 	})
 	if err != nil {
 		return errorutil.AddCurrentContext(err)

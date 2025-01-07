@@ -32,6 +32,12 @@ func (r *employeeRepositoryImpl) GetEmployeeByFilters(ctx context.Context, filte
 		)
 	}
 
+	if filter.DepartementId > 0 {
+		conditions = append(conditions,
+			mewsql.WithCondition("departement_id = ?", filter.DepartementId),
+		)
+	}
+
 	conditions = append(conditions, mewsql.WithCondition("user_id = ?", filter.UserId))
 
 	options := []mewsql.SelectOption{
