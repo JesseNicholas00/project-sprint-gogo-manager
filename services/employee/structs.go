@@ -22,6 +22,16 @@ type AddEmployeeReq struct {
 	UserID           uuid.UUID `json:"userId"`
 }
 
+type UpdateEmployeeReq struct {
+	IdentityNumber      string    `json:"identityNumber" validate:"min=5,max=33"`
+	Name                string    `json:"name" validate:"min=4,max=33"`
+	EmployeeImageUri    string    `json:"employeeImageUri" validate:"url"`
+	Gender              string    `json:"gender" validate:"oneof=male female"`
+	DepartmentId        uuid.UUID `json:"departmentId"`
+	UserID              uuid.UUID `json:"userId"`
+	ParamIdentityNumber string
+}
+
 type AddEmployeeRes struct {
 	IdentityNumber   string    `json:"identityNumber"`
 	Name             string    `json:"name"`
