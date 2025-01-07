@@ -9,12 +9,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *serviceImpl) DeleteDepartment(ctx context.Context, req DeleteDepartmentReq, managerId uuid.UUID) error {
+func (svc *departmentServiceImpl) DeleteDepartment(ctx context.Context, req DeleteDepartmentReq, managerId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 
-	ctx, sess, err := s.dbRizzer.GetOrAppendTx(ctx)
+	ctx, sess, err := svc.dbRizzer.GetOrAppendTx(ctx)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
@@ -22,7 +22,7 @@ func (s *serviceImpl) DeleteDepartment(ctx context.Context, req DeleteDepartment
 	return transaction.RunWithAutoCommit(&sess, func() error {
 		// TODO: Check for employees
 
-		err = s.repo.DeleteDepartment(ctx, department.Department{
+		err = svc.repo.DeleteDepartment(ctx, department.Department{
 			Id:        req.DepartmentId,
 			ManagerId: managerId,
 		})

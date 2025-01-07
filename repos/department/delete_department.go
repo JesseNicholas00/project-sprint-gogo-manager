@@ -5,17 +5,17 @@ import (
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 )
 
-func (r *repositoryImpl) DeleteDepartment(ctx context.Context, department Department) error {
+func (repo *departmentRepositoryImpl) DeleteDepartment(ctx context.Context, department Department) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 
-	ctx, sess, err := r.dbRizzer.GetOrNoTx(ctx)
+	ctx, sess, err := repo.dbRizzer.GetOrNoTx(ctx)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	result, err := sess.NamedStmt(ctx, r.statements.delete).Exec(department)
+	result, err := sess.NamedStmt(ctx, repo.statements.delete).Exec(department)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}

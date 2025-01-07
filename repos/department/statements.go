@@ -33,25 +33,10 @@ func prepareStatements() statements {
 			ORDER BY department_id
 			LIMIT :limit OFFSET :offset;
 		`),
-		get: statementutil.MustPrepareNamed(`
-			SELECT id, name 
-			FROM departments
-			WHERE manager_id = :manager_id
-			ORDER BY id
-			LIMIT :limit OFFSET :offset;
-		`),
-		searchByName: statementutil.MustPrepareNamed(`
-			SELECT id, name 
-			FROM departments
-			WHERE manager_id = :manager_id
-			    AND name ILIKE :name
-			ORDER BY id
-			LIMIT :limit OFFSET :offset;
-		`),
 		delete: statementutil.MustPrepareNamed(`
 			DELETE FROM departments 
 			WHERE manager_id = :manager_id
-			    AND id = :id;
+			    AND department_id = :department_id;
 		`),
 	}
 }

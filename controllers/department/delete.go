@@ -11,23 +11,20 @@ import (
 	"net/http"
 )
 
-func (c *controller) deleteDepartment(ctx echo.Context) error {
+func (ctrl *departmentController) deleteDepartment(ctx echo.Context) error {
 	req := department.DeleteDepartmentReq{}
 	if err := request.BindAndValidate(ctx, &req); err != nil {
 		return err
 	}
 
-	user, ok := ctx.Get("session").(auth.GetSessionFromTokenRes)
-	if !ok {
-		return errorutil.AddCurrentContext(nil, "failed to get user from context")
-	}
+	userId := ctx.Get("session").(auth.GetSessionFromTokenRes).UserId
 
-	managerId, err := uuid.Parse(user.UserId)
+	managerId, err := uuid.Parse(userId)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	if err := c.service.DeleteDepartment(ctx.Request().Context(), req, managerId); err != nil {
+	if err := ctrl.service.DeleteDepartment(ctx.Request().Context(), req, managerId); err != nil {
 		switch {
 		case errors.Is(err, department.ErrDepartmentNotFound):
 			return echo.NewHTTPError(404, echo.Map{
