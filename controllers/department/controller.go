@@ -7,15 +7,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type controller struct {
+type departmentController struct {
 	service department.DepartmentService
 	authMw  middlewares.Middleware
 }
 
-func (c *controller) Register(server *echo.Echo) error {
+func (ctrl *departmentController) Register(server *echo.Echo) error {
 	g := server.Group("/v1/department")
 
-	g.POST("", c.addDepartment, c.authMw.Process)
+	g.POST("", ctrl.addDepartment, ctrl.authMw.Process)
 
 	return nil
 }
@@ -24,7 +24,7 @@ func NewDepartmentController(
 	service department.DepartmentService,
 	authMw middlewares.Middleware,
 ) controllers.Controller {
-	return &controller{
+	return &departmentController{
 		service: service,
 		authMw:  authMw,
 	}

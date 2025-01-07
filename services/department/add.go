@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *departmentServiceImpl) AddDepartment(ctx context.Context, req AddDepartmentReq, res *AddDepartmentRes, managerId uuid.UUID) error {
+func (svc *departmentServiceImpl) AddDepartment(ctx context.Context, req AddDepartmentReq, res *AddDepartmentRes, managerId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -18,7 +18,7 @@ func (s *departmentServiceImpl) AddDepartment(ctx context.Context, req AddDepart
 		return errorutil.AddCurrentContext(err)
 	}
 
-	err = s.repo.AddDepartment(ctx, department.Department{
+	err = svc.repo.AddDepartment(ctx, department.Department{
 		Id:        id,
 		Name:      req.Name,
 		ManagerId: managerId,
@@ -27,7 +27,7 @@ func (s *departmentServiceImpl) AddDepartment(ctx context.Context, req AddDepart
 		return errorutil.AddCurrentContext(err)
 	}
 
-	res = &AddDepartmentRes{
+	*res = AddDepartmentRes{
 		DepartmentId: id,
 		Name:         req.Name,
 	}

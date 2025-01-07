@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func (c *controller) addDepartment(ctx echo.Context) error {
+func (ctrl *departmentController) addDepartment(ctx echo.Context) error {
 	req := department.AddDepartmentReq{}
 	if err := request.BindAndValidate(ctx, &req); err != nil {
 		return err
@@ -25,9 +25,9 @@ func (c *controller) addDepartment(ctx echo.Context) error {
 
 	res := department.AddDepartmentRes{}
 
-	if err := c.service.AddDepartment(ctx.Request().Context(), req, &res, managerId); err != nil {
+	if err := ctrl.service.AddDepartment(ctx.Request().Context(), req, &res, managerId); err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	return ctx.JSON(http.StatusOK, res)
+	return ctx.JSON(http.StatusCreated, res)
 }

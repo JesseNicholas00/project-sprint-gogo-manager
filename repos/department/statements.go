@@ -13,7 +13,7 @@ func prepareStatements() statements {
 	return statements{
 		add: statementutil.MustPrepareNamed(`
 			INSERT INTO departments (department_id, name, manager_id)
-			VALUES (:id, :name, :manager_id);
+			VALUES (:department_id, :name, :manager_id);
 		`),
 	}
 }
