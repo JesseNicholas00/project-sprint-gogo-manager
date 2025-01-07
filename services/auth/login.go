@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-
 	"github.com/JesseNicholas00/GogoManager/repos/auth"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
@@ -26,9 +25,13 @@ func (svc *authServiceImpl) LoginUser(
 	return transaction.RunWithAutoCommit(&sess, func() error {
 		user, err := svc.repo.FindUserByEmail(ctx, req.Email)
 
-		if !errors.Is(err, auth.ErrEmailNotFound) {
-			// unexpected kind of error
-			return errorutil.AddCurrentContext(err)
+		if err != nil {
+			switch {
+			case errors.Is(err, auth.ErrEmailNotFound):
+				return ErrUserNotFound
+			default:
+				return errorutil.AddCurrentContext(err)
+			}
 		}
 
 		token, err := svc.generateToken(user)
