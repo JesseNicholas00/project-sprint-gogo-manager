@@ -7,8 +7,7 @@ import (
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 )
 
-func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params GetEmployeeReq,
-	res *[]GetEmployeeResp, userId string) error {
+func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params GetEmployeeReq, res *GetEmployeeResp, userId string) error {
 
 	if err := ctx.Err(); err != nil {
 		return err
@@ -26,7 +25,7 @@ func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params G
 	}
 
 	for _, e := range employees {
-		*res = append(*res, GetEmployeeResp{
+		*res = append(*res, AddEmployeeRes{
 			IdentityNumber:   e.IdentityNumber,
 			Name:             e.Name,
 			EmployeeImageUri: e.EmployeeImageUri,

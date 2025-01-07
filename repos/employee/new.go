@@ -2,12 +2,14 @@ package employee
 
 import "github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 
-type employeeRepositoryImpl struct {
-	dbRizzer ctxrizz.DbContextRizzer
+type repositoryEmployeeImpl struct {
+	dbRizzer   ctxrizz.DbContextRizzer
+	statements statements
 }
 
 func NewRepository(dbRizzer ctxrizz.DbContextRizzer) EmployeeRepository {
-	return &employeeRepositoryImpl{
-		dbRizzer: dbRizzer,
+	return &repositoryEmployeeImpl{
+		dbRizzer:   dbRizzer,
+		statements: prepareStatements(),
 	}
 }

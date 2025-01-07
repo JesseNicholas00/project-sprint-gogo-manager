@@ -27,7 +27,7 @@ func (e *employeeController) getEmployeeByFilters(ctx echo.Context) error {
 
 	user := ctx.Get("session").(auth.GetSessionFromTokenRes)
 
-	var res []employee.GetEmployeeResp
+	var res employee.GetEmployeeResp
 	if err := e.service.GetEmployeeByFilters(ctx.Request().Context(), params, &res, user.UserId); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

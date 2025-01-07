@@ -7,7 +7,7 @@ import (
 	"github.com/JesseNicholas00/GogoManager/utils/mewsql"
 )
 
-func (r *employeeRepositoryImpl) GetEmployeeByFilters(ctx context.Context, filter FilterEmployee) ([]Employee, error) {
+func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filter FilterEmployee) ([]Employee, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
