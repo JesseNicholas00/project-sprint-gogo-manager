@@ -6,9 +6,10 @@ import (
 )
 
 type statements struct {
-	create      *sqlx.NamedStmt
-	update      *sqlx.NamedStmt
-	findByEmail *sqlx.Stmt
+	create       *sqlx.NamedStmt
+	update       *sqlx.NamedStmt
+	findByEmail  *sqlx.Stmt
+	findByUserId *sqlx.Stmt
 }
 
 func prepareStatements() statements {
@@ -50,6 +51,14 @@ func prepareStatements() statements {
 				users
 			WHERE
 				email = $1
+		`),
+		findByUserId: statementutil.MustPrepare(`
+			SELECT
+				*
+			FROM
+				users
+			WHERE
+				user_id = $1
 		`),
 	}
 }

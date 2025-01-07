@@ -15,6 +15,7 @@ type authController struct {
 func (ctrl *authController) Register(server *echo.Echo) error {
 	server.POST("/v1/auth", ctrl.authenticateUser)
 	server.PATCH("/v1/user", ctrl.updateUser, ctrl.authMw.Process)
+	server.GET("/v1/user", ctrl.findUser, ctrl.authMw.Process)
 	return nil
 }
 
