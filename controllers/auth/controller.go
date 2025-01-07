@@ -14,6 +14,9 @@ func (s *authController) Register(server *echo.Echo) error {
 	server.POST("/v1/auth", func(c echo.Context) error {
 		return s.authenticateUser(c)
 	})
+	server.PATCH("/v1/user", func(c echo.Context) error {
+		return s.updateUser(c)
+	})
 	return nil
 }
 

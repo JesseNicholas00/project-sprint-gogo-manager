@@ -7,6 +7,7 @@ import (
 
 type statements struct {
 	create      *sqlx.NamedStmt
+	update      *sqlx.NamedStmt
 	findByEmail *sqlx.Stmt
 }
 
@@ -25,6 +26,22 @@ func prepareStatements() statements {
 				user_id,
 				email,
 				password
+		`),
+		update: statementutil.MustPrepareNamed(`
+			UPDATE users
+			SET
+				email = :email,
+				user_image_uri = :user_image_uri,
+				company_name = :company_name,
+				company_image_uri = :company_image_uri
+			WHERE user_id = :user_id
+			RETURNING
+				user_id,
+				email,
+				password,
+				user_image_uri,
+				company_name,
+				company_image_uri
 		`),
 		findByEmail: statementutil.MustPrepare(`
 			SELECT
