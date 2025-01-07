@@ -3,11 +3,14 @@ package main
 import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
+  departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
 	employeeCtrl "github.com/JesseNicholas00/GogoManager/controllers/employee"
 	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
+  departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
 	employeeRepo "github.com/JesseNicholas00/GogoManager/repos/employee"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
+  departmentSvc "github.com/JesseNicholas00/GogoManager/services/department"
 	employeeSvc "github.com/JesseNicholas00/GogoManager/services/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 	"github.com/JesseNicholas00/GogoManager/utils/logging"
@@ -41,7 +44,13 @@ func initControllers(
 	authController := authCtrl.NewAuthController(authService)
 	ctrls = append(ctrls, authController)
 
-	employeeRepository := employeeRepo.NewRepository(dbRizzer)
+	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
+	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
+	departmentMw := middlewares.NewAuthMiddleware(authService)
+	departmentController := departmentCtrl.NewDepartmentController(departmentService, departmentMw)
+	ctrls = append(ctrls, departmentController)
+  
+  employeeRepository := employeeRepo.NewRepository(dbRizzer)
 	employeeService := employeeSvc.NewService(employeeRepository, dbRizzer)
 	employeeMw := middlewares.NewAuthMiddleware(authService)
 	employeeController := employeeCtrl.NewEmployeeController(employeeService, employeeMw)
