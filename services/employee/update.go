@@ -5,7 +5,6 @@ import (
 
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
-	"github.com/google/uuid"
 )
 
 func (svc *employeeServiceImpl) UpdateEmployee(
@@ -29,24 +28,24 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 			return errorutil.AddCurrentContext(err)
 		}
 
-		if req.IdentityNumber != "" {
-			employee.IdentityNumber = req.IdentityNumber
+		if req.IdentityNumber != nil {
+			employee.IdentityNumber = *req.IdentityNumber
 		}
 
-		if req.Name != "" {
-			employee.Name = req.Name
+		if req.Name != nil {
+			employee.Name = *req.Name
 		}
 
-		if req.EmployeeImageUri != "" {
-			employee.EmployeeImageUri = req.EmployeeImageUri
+		if req.EmployeeImageUri != nil {
+			employee.EmployeeImageUri = *req.EmployeeImageUri
 		}
 
-		if req.Gender != "" {
-			employee.Gender = req.Gender
+		if req.Gender != nil {
+			employee.Gender = *req.Gender
 		}
 
-		if req.DepartmentId != uuid.Nil {
-			employee.DepartmentId = req.DepartmentId
+		if req.DepartmentId != nil {
+			employee.DepartmentId = *req.DepartmentId
 		}
 
 		result, err := svc.repo.UpdateEmployee(ctx, employee, req.ParamIdentityNumber)
