@@ -5,6 +5,7 @@ import (
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
 	departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
 	employeeCtrl "github.com/JesseNicholas00/GogoManager/controllers/employee"
+	fileCtrl "github.com/JesseNicholas00/GogoManager/controllers/file"
 	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
 	departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
@@ -50,6 +51,15 @@ func initControllers(
 	employeeController := employeeCtrl.NewEmployeeController(employeeService, employeeMw)
 	ctrls = append(ctrls, employeeController)
 
+	userMw := middlewares.NewAuthMiddleware(authService)
+
+	imageController := fileCtrl.NewImageController(
+		uploader,
+		cfg.awsS3BucketName,
+		userMw,
+	)
+
+	ctrls = append(ctrls, imageController)
 	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
 	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
 	departmentMw := middlewares.NewAuthMiddleware(authService)
