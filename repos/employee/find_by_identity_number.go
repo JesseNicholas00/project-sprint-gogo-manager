@@ -39,5 +39,10 @@ func (r *repositoryEmployeeImpl) FindEmployeeByIdentityNumber(
 		}
 	}
 
+	if res.IdentityNumber == "" {
+		err = ErrIdentityNumberNotFound
+		return
+	}
+
 	return
 }

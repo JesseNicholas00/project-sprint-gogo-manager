@@ -2,7 +2,9 @@ package employee
 
 import (
 	"context"
+	"errors"
 
+	repoEmployee "github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
 )
@@ -25,10 +27,25 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 		employee, err := svc.repo.FindEmployeeByIdentityNumber(ctx, req.ParamIdentityNumber)
 
 		if err != nil {
-			return errorutil.AddCurrentContext(err)
+			switch err {
+			case repoEmployee.ErrIdentityNumberNotFound:
+				return ErrIdentityNumberNotFound
+			default:
+				return errorutil.AddCurrentContext(err)
+
+			}
 		}
 
-		if req.IdentityNumber != nil {
+		if req.IdentityNumber != nil && *req.IdentityNumber != employee.IdentityNumber {
+			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber)
+			if err == nil {
+				return ErrIdentityNumberAlreadyExists
+			}
+
+			if !errors.Is(err, repoEmployee.ErrIdentityNumberNotFound) {
+				return errorutil.AddCurrentContext(err)
+			}
+
 			employee.IdentityNumber = *req.IdentityNumber
 		}
 

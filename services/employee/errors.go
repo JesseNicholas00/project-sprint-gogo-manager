@@ -2,6 +2,10 @@ package employee
 
 import "errors"
 
-var ErrEmployeeNotFound = errors.New(
-	"employeeService: no such employee found",
+var ErrIdentityNumberNotFound = errors.New(
+	"employeeRepository: no such identity number found",
+)
+
+var ErrIdentityNumberAlreadyExists = errors.New(
+	"employeeRepository: identity number already exists",
 )
