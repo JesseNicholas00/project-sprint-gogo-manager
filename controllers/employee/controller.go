@@ -14,10 +14,10 @@ type employeeController struct {
 
 func (c *employeeController) Register(server *echo.Echo) error {
 
-	g := server.Group("/v1/employee")
-	g.GET("", c.getEmployeeByFilters, c.authMw.Process)
-	g.POST("", c.addEmployee, c.authMw.Process)
-	g.PATCH("/:identityNumber", c.updateEmployee, c.authMw.Process)
+	g := server.Group("/v1/employee", c.authMw.Process)
+	g.GET("", c.getEmployeeByFilters)
+	g.POST("", c.addEmployee)
+	g.PATCH("/:identityNumber", c.updateEmployee)
 
 	return nil
 }
