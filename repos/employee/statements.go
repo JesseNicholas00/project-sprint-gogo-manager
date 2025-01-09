@@ -6,9 +6,10 @@ import (
 )
 
 type statements struct {
-	add                 *sqlx.NamedStmt
-	getByIdentityNumber *sqlx.Stmt
-	update              *sqlx.Stmt
+	add                   *sqlx.NamedStmt
+	getByIdentityNumber   *sqlx.Stmt
+	update                *sqlx.Stmt
+	isIdentityNumberExist *sqlx.Stmt
 }
 
 func prepareStatements() statements {
@@ -28,6 +29,13 @@ func prepareStatements() statements {
 			SET identity_number = $1, name = $2, employee_image_uri = $3, gender = $4, department_id = $5
 			WHERE identity_number = $6
 			RETURNING identity_number, name, employee_image_uri, gender, department_id
+		`),
+		isIdentityNumberExist: statementutil.MustPrepare(`
+			SELECT EXISTS (
+				SELECT 1
+				FROM employees
+				WHERE identity_number = $1
+			)
 		`),
 	}
 }
