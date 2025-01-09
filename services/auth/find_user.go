@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
-	"github.com/JesseNicholas00/GogoManager/utils/transaction"
 )
 
 func (svc *authServiceImpl) FindUser(
@@ -16,25 +15,18 @@ func (svc *authServiceImpl) FindUser(
 		return err
 	}
 
-	ctx, sess, err := svc.dbRizzer.GetOrAppendTx(ctx)
+	user, err := svc.repo.FindUserByUserId(ctx, userId)
+
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	return transaction.RunWithAutoCommit(&sess, func() error {
-		user, err := svc.repo.FindUserByUserId(ctx, userId)
-
-		if err != nil {
-			return errorutil.AddCurrentContext(err)
-		}
-
-		*res = FindUserRes{
-			Email:           user.Email,
-			Name:            user.Name,
-			UserImageUri:    user.UserImageUri,
-			CompanyName:     user.CompanyName,
-			CompanyImageUri: user.CompanyImageUri,
-		}
-		return nil
-	})
+	*res = FindUserRes{
+		Email:           user.Email,
+		Name:            user.Name,
+		UserImageUri:    user.UserImageUri,
+		CompanyName:     user.CompanyName,
+		CompanyImageUri: user.CompanyImageUri,
+	}
+	return nil
 }
