@@ -31,12 +31,19 @@ func (r *repositoryEmployeeImpl) FindEmployeeByIdentityNumber(
 	}
 	defer rows.Close()
 
+	found := false
 	for rows.Next() {
+		found = true
 		err = rows.StructScan(&res)
 		if err != nil {
 			err = errorutil.AddCurrentContext(err)
 			return
 		}
+	}
+
+	if !found {
+		err = ErrEmployeeNotFound
+		return
 	}
 
 	return
