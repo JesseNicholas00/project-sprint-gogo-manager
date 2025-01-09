@@ -3,6 +3,7 @@ package department
 import (
 	"context"
 	"errors"
+
 	"github.com/JesseNicholas00/GogoManager/repos/department"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"

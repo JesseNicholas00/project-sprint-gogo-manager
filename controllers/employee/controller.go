@@ -16,6 +16,7 @@ func (c *employeeController) Register(server *echo.Echo) error {
 	g := server.Group("/v1/employee")
 
 	g.POST("", c.addEmployee, c.authMw.Process)
+	g.DELETE("/:identityNumber", c.deleteEmployee, c.authMw.Process)
 
 	return nil
 }

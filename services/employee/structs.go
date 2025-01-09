@@ -18,3 +18,7 @@ type AddEmployeeRes struct {
 	Gender           string    `json:"gender"`
 	DepartmentId     uuid.UUID `json:"departmentId"`
 }
+
+type DeleteEmployeeReq struct {
+	IdentityNumber string `param:"identityNumber"`
+}
