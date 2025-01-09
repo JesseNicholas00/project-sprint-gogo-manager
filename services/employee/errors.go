@@ -3,6 +3,6 @@ package employee
 import "errors"
 
 var (
-	ErrEmployeeNotFound = errors.New("employeeService: no such employee found")
-	ErrorEmployeeExist  = errors.New("employeeService: employee already exist")
+	ErrIdentityNumberNotFound      = errors.New("employeeService: no such identity number found")
+	ErrIdentityNumberAlreadyExists = errors.New("employeeService: identity number already exists")
 )

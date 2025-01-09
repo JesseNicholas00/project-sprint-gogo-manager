@@ -1,6 +1,7 @@
 package employee
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/GogoManager/services/employee"
@@ -20,7 +21,18 @@ func (c *employeeController) updateEmployee(ctx echo.Context) error {
 	res := employee.AddEmployeeRes{}
 
 	if err := c.service.UpdateEmployee(ctx.Request().Context(), req, &res); err != nil {
-		return errorutil.AddCurrentContext(err)
+		switch {
+		case errors.Is(err, employee.ErrIdentityNumberNotFound):
+			return echo.NewHTTPError(http.StatusNotFound, echo.Map{
+				"message": "identity number not found",
+			})
+		case errors.Is(err, employee.ErrIdentityNumberAlreadyExists):
+			return echo.NewHTTPError(http.StatusConflict, echo.Map{
+				"message": "identity number already exists",
+			})
+		default:
+			return errorutil.AddCurrentContext(err)
+		}
 	}
 
 	return ctx.JSON(http.StatusOK, res)

@@ -42,7 +42,7 @@ func (r *repositoryEmployeeImpl) FindEmployeeByIdentityNumber(
 	}
 
 	if !found {
-		err = ErrEmployeeNotFound
+		err = ErrIdentityNumberNotFound
 		return
 	}
 

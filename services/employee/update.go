@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	repoEmployee "github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
 )
@@ -27,20 +28,25 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 
 		// Check if employee is not found
 		if err != nil {
-			switch {
-			case errors.Is(err, ErrEmployeeNotFound):
-				return ErrEmployeeNotFound
+			switch err {
+			case repoEmployee.ErrIdentityNumberNotFound:
+				return ErrIdentityNumberNotFound
 			default:
 				return errorutil.AddCurrentContext(err)
+
 			}
 		}
 
-		if req.IdentityNumber != nil {
-			// check if identity number is already exist
+		if req.IdentityNumber != nil && *req.IdentityNumber != employee.IdentityNumber {
 			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber)
 			if err == nil {
-				return ErrorEmployeeExist
+				return ErrIdentityNumberAlreadyExists
 			}
+
+			if !errors.Is(err, repoEmployee.ErrIdentityNumberNotFound) {
+				return errorutil.AddCurrentContext(err)
+			}
+
 			employee.IdentityNumber = *req.IdentityNumber
 		}
 
