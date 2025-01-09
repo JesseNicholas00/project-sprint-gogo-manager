@@ -25,7 +25,7 @@ func (svc *authServiceImpl) UpdateUser(
 	}
 
 	return transaction.RunWithAutoCommit(&sess, func() error {
-		existingUser, err := svc.repo.FindUserByEmail(ctx, *req.Email)
+		_, err := svc.repo.FindUserByEmail(ctx, *req.Email)
 
 		if err == nil {
 			return ErrEmailAlreadyRegistered
@@ -36,10 +36,17 @@ func (svc *authServiceImpl) UpdateUser(
 			return errorutil.AddCurrentContext(err)
 		}
 
-		updatedUser := existingUser
+		updatedUser, err := svc.repo.FindUserByUserId(ctx, userId)
+
+		if err != nil {
+			return errorutil.AddCurrentContext(err)
+		}
 
 		if req.Email != nil {
 			updatedUser.Email = *req.Email
+		}
+		if req.Name != nil {
+			updatedUser.Name = *req.Name
 		}
 		if req.UserImageUri != nil {
 			updatedUser.UserImageUri = *req.UserImageUri

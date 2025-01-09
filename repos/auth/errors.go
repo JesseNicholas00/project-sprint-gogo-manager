@@ -7,5 +7,5 @@ var ErrEmailNotFound = errors.New(
 )
 
 var ErrUserIdNotFound = errors.New(
-	"authRepository: no such userId found",
+	"authRepository: no such user with userId found",
 )

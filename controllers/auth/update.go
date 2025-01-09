@@ -27,9 +27,9 @@ func (ctrl *authController) updateUser(c echo.Context) error {
 		&res,
 	); err != nil {
 		switch {
-		case errors.Is(err, auth.ErrUserNotFound):
-			return echo.NewHTTPError(http.StatusNotFound, echo.Map{
-				"message": "user not found",
+		case errors.Is(err, auth.ErrEmailAlreadyRegistered):
+			return echo.NewHTTPError(http.StatusConflict, echo.Map{
+				"message": "email already used by another person",
 			})
 		default:
 			return errorutil.AddCurrentContext(err)

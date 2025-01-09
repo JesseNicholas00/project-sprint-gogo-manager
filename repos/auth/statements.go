@@ -8,8 +8,8 @@ import (
 type statements struct {
 	create       *sqlx.NamedStmt
 	update       *sqlx.NamedStmt
-	findByEmail  *sqlx.Stmt
 	findByUserId *sqlx.Stmt
+	findByEmail  *sqlx.Stmt
 }
 
 func prepareStatements() statements {
@@ -32,25 +32,19 @@ func prepareStatements() statements {
 			UPDATE users
 			SET
 				email = :email,
+				user_name = :user_name,
 				user_image_uri = :user_image_uri,
 				company_name = :company_name,
 				company_image_uri = :company_image_uri
 			WHERE user_id = :user_id
 			RETURNING
 				user_id,
+				user_name,
 				email,
 				password,
 				user_image_uri,
 				company_name,
 				company_image_uri
-		`),
-		findByEmail: statementutil.MustPrepare(`
-			SELECT
-				*
-			FROM
-				users
-			WHERE
-				email = $1
 		`),
 		findByUserId: statementutil.MustPrepare(`
 			SELECT
@@ -59,6 +53,14 @@ func prepareStatements() statements {
 				users
 			WHERE
 				user_id = $1
+		`),
+		findByEmail: statementutil.MustPrepare(`
+			SELECT
+				*
+			FROM
+				users
+			WHERE
+				email = $1
 		`),
 	}
 }
