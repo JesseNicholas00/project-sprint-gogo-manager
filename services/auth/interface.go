@@ -24,4 +24,9 @@ type AuthService interface {
 		req UpdateUserReq,
 		res *UpdateUserRes,
 	) error
+	FindUser(
+		ctx context.Context,
+		userId string,
+		res *FindUserRes,
+	) error
 }
