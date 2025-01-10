@@ -4,12 +4,15 @@ import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
 	departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
+	employeeCtrl "github.com/JesseNicholas00/GogoManager/controllers/employee"
 	fileCtrl "github.com/JesseNicholas00/GogoManager/controllers/file"
 	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
 	departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
+	employeeRepo "github.com/JesseNicholas00/GogoManager/repos/employee"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
 	departmentSvc "github.com/JesseNicholas00/GogoManager/services/department"
+	employeeSvc "github.com/JesseNicholas00/GogoManager/services/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 	"github.com/JesseNicholas00/GogoManager/utils/logging"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -43,6 +46,12 @@ func initControllers(
 	authController := authCtrl.NewAuthController(authService, authMw)
 	ctrls = append(ctrls, authController)
 
+	employeeRepository := employeeRepo.NewRepository(dbRizzer)
+	employeeService := employeeSvc.NewEmployeeService(employeeRepository, dbRizzer)
+	employeeMw := middlewares.NewAuthMiddleware(authService)
+	employeeController := employeeCtrl.NewEmployeeController(employeeService, employeeMw)
+	ctrls = append(ctrls, employeeController)
+
 	userMw := middlewares.NewAuthMiddleware(authService)
 
 	imageController := fileCtrl.NewImageController(
@@ -50,6 +59,7 @@ func initControllers(
 		cfg.awsS3BucketName,
 		userMw,
 	)
+
 	ctrls = append(ctrls, imageController)
 	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
 	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
