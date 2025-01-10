@@ -26,7 +26,7 @@ func (ctrl *employeeController) addEmployee(ctx echo.Context) error {
 	}
 
 	// check identityNumber is exist using IsIdentityNumberExist if exist return error 409
-	exists, err := ctrl.service.IsIdentityNumberExist(ctx.Request().Context(), req.IdentityNumber)
+	exists, err := ctrl.service.IsIdentityNumberExist(ctx.Request().Context(), req.IdentityNumber, userId)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}

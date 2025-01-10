@@ -15,26 +15,26 @@ type statements struct {
 func prepareStatements() statements {
 	return statements{
 		add: statementutil.MustPrepareNamed(`
-			INSERT INTO employees (identity_number, name, employee_image_uri, gender, department_id)
-			VALUES (:identity_number, :name, :employee_image_uri, :gender, :department_id)
+			INSERT INTO employees (identity_number, name, employee_image_uri, gender, department_id, user_id)
+			VALUES (:identity_number, :name, :employee_image_uri, :gender, :department_id, :user_id)
 			RETURNING identity_number, name, employee_image_uri, gender, department_id
 		`),
 		getByIdentityNumber: statementutil.MustPrepare(`
 			SELECT *
 			FROM employees
-			WHERE identity_number = $1
+			WHERE identity_number = $1 and user_id = $2
 		`),
 		update: statementutil.MustPrepare(`
 			UPDATE employees
 			SET identity_number = $1, name = $2, employee_image_uri = $3, gender = $4, department_id = $5
-			WHERE identity_number = $6
+			WHERE identity_number = $6 and user_id = $7
 			RETURNING identity_number, name, employee_image_uri, gender, department_id
 		`),
 		isIdentityNumberExist: statementutil.MustPrepare(`
 			SELECT EXISTS (
 				SELECT 1
 				FROM employees
-				WHERE identity_number = $1
+				WHERE identity_number = $1 and user_id = $2
 			)
 		`),
 	}

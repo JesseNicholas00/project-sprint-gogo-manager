@@ -8,7 +8,8 @@ import (
 
 func (r *repositoryEmployeeImpl) FindEmployeeByIdentityNumber(
 	ctx context.Context,
-	identityNumber string,
+	identityNumber,
+	userID string,
 ) (res Employee, err error) {
 
 	if err := ctx.Err(); err != nil {
@@ -23,7 +24,7 @@ func (r *repositoryEmployeeImpl) FindEmployeeByIdentityNumber(
 
 	rows, err := sess.
 		Stmt(ctx, r.statements.getByIdentityNumber).
-		QueryxContext(ctx, identityNumber)
+		QueryxContext(ctx, identityNumber, userID)
 
 	if err != nil {
 		err = errorutil.AddCurrentContext(err)

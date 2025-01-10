@@ -6,7 +6,7 @@ import (
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 )
 
-func (r *repositoryEmployeeImpl) UpdateEmployee(ctx context.Context, employee Employee, identityNumber string) (res Employee, err error) {
+func (r *repositoryEmployeeImpl) UpdateEmployee(ctx context.Context, employee Employee, identityNumber, userID string) (res Employee, err error) {
 	if err = ctx.Err(); err != nil {
 		return
 	}
@@ -25,6 +25,7 @@ func (r *repositoryEmployeeImpl) UpdateEmployee(ctx context.Context, employee Em
 			employee.Gender,
 			employee.DepartmentId,
 			identityNumber,
+			userID,
 		)
 	if err != nil {
 		err = errorutil.AddCurrentContext(err)

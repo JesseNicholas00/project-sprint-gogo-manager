@@ -1,6 +1,6 @@
 CREATE TABLE employees
 (
-    identity_number VARCHAR(33) UNIQUE PRIMARY KEY,
+    identity_number VARCHAR(33),
     name VARCHAR(33) NOT NULL,
     employee_image_uri TEXT,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),

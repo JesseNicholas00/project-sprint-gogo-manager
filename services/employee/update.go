@@ -24,7 +24,7 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 	}
 
 	return transaction.RunWithAutoCommit(&sess, func() error {
-		employee, err := svc.repo.FindEmployeeByIdentityNumber(ctx, req.ParamIdentityNumber)
+		employee, err := svc.repo.FindEmployeeByIdentityNumber(ctx, req.ParamIdentityNumber, req.UserID)
 
 		// Check if employee is not found
 		if err != nil {
@@ -38,7 +38,7 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 		}
 
 		if req.IdentityNumber != nil && *req.IdentityNumber != employee.IdentityNumber {
-			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber)
+			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber, req.UserID)
 			if err == nil {
 				return ErrIdentityNumberAlreadyExists
 			}
@@ -66,7 +66,7 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 			employee.DepartmentId = *req.DepartmentId
 		}
 
-		result, err := svc.repo.UpdateEmployee(ctx, employee, req.ParamIdentityNumber)
+		result, err := svc.repo.UpdateEmployee(ctx, employee, req.ParamIdentityNumber, req.UserID)
 		if err != nil {
 			return errorutil.AddCurrentContext(err)
 		}

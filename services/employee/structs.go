@@ -28,7 +28,7 @@ type UpdateEmployeeReq struct {
 	EmployeeImageUri    *string    `json:"employeeImageUri" validate:"url"`
 	Gender              *string    `json:"gender" validate:"oneof=male female"`
 	DepartmentId        *uuid.UUID `json:"departmentId"`
-	UserID              uuid.UUID  `json:"userId"`
+	UserID              string     `json:"userId"`
 	ParamIdentityNumber string
 }
 

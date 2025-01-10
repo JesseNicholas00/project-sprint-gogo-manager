@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/JesseNicholas00/GogoManager/services/auth"
 	"github.com/JesseNicholas00/GogoManager/services/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/request"
@@ -17,6 +18,7 @@ func (c *employeeController) updateEmployee(ctx echo.Context) error {
 	}
 
 	req.ParamIdentityNumber = ctx.Param("identityNumber")
+	req.UserID = ctx.Get("session").(auth.GetSessionFromTokenRes).UserId
 
 	res := employee.AddEmployeeRes{}
 
