@@ -18,4 +18,10 @@ type AuthService interface {
 		req GetSessionFromTokenReq,
 		res *GetSessionFromTokenRes,
 	) error
+	UpdateUser(
+		ctx context.Context,
+		userId string,
+		req UpdateUserReq,
+		res *UpdateUserRes,
+	) error
 }
