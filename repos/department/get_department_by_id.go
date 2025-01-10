@@ -21,16 +21,14 @@ func (repo *departmentRepositoryImpl) GetDepartmentById(ctx context.Context, dep
 	findById := repo.statements.getById
 
 	// Create map for querying
-	filter := map[string]string{
+	filter := map[string]interface{}{
 		"department_id": departmentId.String(),
 		"manager_id":    managerId.String(),
 	}
 
 	var department Department
 
-	row := sess.NamedStmt(ctx, findById).QueryRowx(filter)
-
-	err = row.Scan(&row)
+	err = sess.NamedStmt(ctx, findById).QueryRowx(filter).StructScan(&department)
 
 	if err != nil {
 		err = errorutil.AddCurrentContext(err)

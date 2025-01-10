@@ -7,6 +7,7 @@ import (
 
 type statements struct {
 	add          *sqlx.NamedStmt
+	update       *sqlx.NamedStmt
 	get          *sqlx.NamedStmt
 	getById      *sqlx.NamedStmt
 	searchByName *sqlx.NamedStmt
@@ -18,6 +19,11 @@ func prepareStatements() statements {
 		add: statementutil.MustPrepareNamed(`
 			INSERT INTO departments (department_id, name, manager_id)
 			VALUES (:department_id, :name, :manager_id);
+		`),
+		update: statementutil.MustPrepareNamed(`
+			UPDATE departments
+			SET name = :name
+			WHERE department_id = :department_id
 		`),
 		getById: statementutil.MustPrepareNamed(`
 			SELECT department_id, name
