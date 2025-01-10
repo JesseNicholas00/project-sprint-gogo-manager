@@ -16,7 +16,7 @@ func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filte
 
 	if filter.IdentityNumber != "" {
 		conditions = append(conditions,
-			mewsql.WithCondition("identity_number ILIKE ?", "%"+filter.IdentityNumber+"%"),
+			mewsql.WithCondition("identity_number ILIKE ?", "%"+filter.IdentityNumber),
 		)
 	}
 
@@ -45,13 +45,6 @@ func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filte
 		mewsql.WithOffset(filter.Offset),
 		mewsql.WithWhere(conditions...),
 	}
-
-	// sql, args := mewsql.Select(
-	// 	`identity_number, name, employee_image_uri,
-	// 		gender, employee_id`,
-	// 	"employees",
-	// 	options...,
-	// )
 
 	sql, args := mewsql.Select(
 		`identity_number, name, employee_image_uri, gender, departement_id`,
