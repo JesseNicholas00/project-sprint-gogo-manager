@@ -21,7 +21,14 @@ func (svc *departmentServiceImpl) DeleteDepartment(ctx context.Context, req Dele
 	}
 
 	return transaction.RunWithAutoCommit(&sess, func() error {
-		// TODO: Check for employees
+		isContainEmployee, err := svc.repo.IsContainEmployee(ctx, req.DepartmentId)
+		if err != nil {
+			return errorutil.AddCurrentContext(err)
+		}
+
+		if isContainEmployee {
+			return ErrContainEmployee
+		}
 
 		err = svc.repo.DeleteDepartment(ctx, department.Department{
 			Id:        req.DepartmentId,
