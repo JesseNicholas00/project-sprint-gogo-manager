@@ -44,5 +44,5 @@ func (ctrl *departmentController) updateDepartment(ctx echo.Context) error {
 		return errorutil.AddCurrentContext(err)
 	}
 
-	return ctx.JSON(http.StatusCreated, res)
+	return ctx.JSON(http.StatusOK, res)
 }
