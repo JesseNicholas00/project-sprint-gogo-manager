@@ -26,8 +26,12 @@ func (ctrl *departmentController) deleteDepartment(ctx echo.Context) error {
 
 	if err := ctrl.service.DeleteDepartment(ctx.Request().Context(), req, managerId); err != nil {
 		switch {
+		case errors.Is(err, department.ErrContainEmployee):
+			return echo.NewHTTPError(http.StatusConflict, echo.Map{
+				"message": "department has employee(s)",
+			})
 		case errors.Is(err, department.ErrDepartmentNotFound):
-			return echo.NewHTTPError(404, echo.Map{
+			return echo.NewHTTPError(http.StatusNotFound, echo.Map{
 				"message": "department not found",
 			})
 		default:

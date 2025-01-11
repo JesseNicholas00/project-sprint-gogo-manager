@@ -6,12 +6,13 @@ import (
 )
 
 type statements struct {
-	add          *sqlx.NamedStmt
-	update       *sqlx.NamedStmt
-	get          *sqlx.NamedStmt
-	getById      *sqlx.NamedStmt
-	searchByName *sqlx.NamedStmt
-	delete       *sqlx.NamedStmt
+	add               *sqlx.NamedStmt
+	update            *sqlx.NamedStmt
+	get               *sqlx.NamedStmt
+	getById           *sqlx.NamedStmt
+	searchByName      *sqlx.NamedStmt
+	delete            *sqlx.NamedStmt
+	isContainEmployee *sqlx.Stmt
 }
 
 func prepareStatements() statements {
@@ -51,6 +52,11 @@ func prepareStatements() statements {
 			DELETE FROM departments 
 			WHERE manager_id = :manager_id
 			    AND department_id = :department_id;
+		`),
+		isContainEmployee: statementutil.MustPrepare(`
+			SELECT COUNT(1) 
+			FROM employees 
+			WHERE department_id = $1
 		`),
 	}
 }
