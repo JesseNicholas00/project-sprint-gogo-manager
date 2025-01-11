@@ -27,7 +27,7 @@ func (ctrl *departmentController) updateDepartment(ctx echo.Context) error {
 	}
 
 	// Validate data
-	req := department.AddDepartmentReq{}
+	req := department.UpdateDepartmentReq{}
 	if err := request.BindAndValidate(ctx, &req); err != nil {
 		return err
 	}

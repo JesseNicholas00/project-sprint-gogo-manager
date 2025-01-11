@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req AddDepartmentReq, res *AddDepartmentRes, departmentId uuid.UUID, managerId uuid.UUID) error {
+func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req UpdateDepartmentReq, res *AddDepartmentRes, departmentId uuid.UUID, managerId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -19,7 +19,12 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req AddD
 	}
 
 	// Update department
-	department.Name = req.Name
+	// Return the request if request body is nil
+	if req.Name == nil {
+		return nil
+	}
+
+	department.Name = *req.Name
 
 	err = svc.repo.UpdateDepartment(ctx, *department)
 
@@ -29,7 +34,7 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req AddD
 
 	*res = AddDepartmentRes{
 		DepartmentId: departmentId,
-		Name:         req.Name,
+		Name:         *req.Name,
 	}
 
 	return nil
