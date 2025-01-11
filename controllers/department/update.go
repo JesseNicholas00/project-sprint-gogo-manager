@@ -34,13 +34,8 @@ func (ctrl *departmentController) updateDepartment(ctx echo.Context) error {
 
 	res := department.AddDepartmentRes{}
 
-	// Get department by ID first
-	if err := ctrl.service.GetDepartmentById(ctx.Request().Context(), &res, departmentId, managerId); err != nil {
-		return errorutil.AddCurrentContext(err)
-	}
-
 	// Update found department
-	if err = ctrl.service.UpdateDepartment(ctx.Request().Context(), req, &res, departmentId); err != nil {
+	if err = ctrl.service.UpdateDepartment(ctx.Request().Context(), req, &res, departmentId, managerId); err != nil {
 		return errorutil.AddCurrentContext(err)
 	}
 
