@@ -8,21 +8,23 @@ import (
 )
 
 type employeeController struct {
-	service employee.Service
+	service employee.EmployeeService
 	authMw  middlewares.Middleware
 }
 
 func (c *employeeController) Register(server *echo.Echo) error {
-	g := server.Group("/v1/employee")
 
-	g.POST("", c.addEmployee, c.authMw.Process)
-	g.DELETE("/:identityNumber", c.deleteEmployee, c.authMw.Process)
+	g := server.Group("/v1/employee", c.authMw.Process)
+	g.GET("", c.getEmployeeByFilters)
+	g.POST("", c.addEmployee)
+	g.PATCH("/:identityNumber", c.updateEmployee)
+	g.DELETE("/:identityNumber", c.deleteEmployee)
 
 	return nil
 }
 
 func NewEmployeeController(
-	service employee.Service,
+	service employee.EmployeeService,
 	authMw middlewares.Middleware,
 ) controllers.Controller {
 	return &employeeController{

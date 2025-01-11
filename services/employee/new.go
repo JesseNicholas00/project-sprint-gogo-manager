@@ -5,16 +5,16 @@ import (
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 )
 
-type serviceImpl struct {
+type employeeServiceImpl struct {
 	repo     employee.EmployeeRepository
 	dbRizzer ctxrizz.DbContextRizzer
 }
 
-func NewService(
+func NewEmployeeService(
 	repo employee.EmployeeRepository,
 	dbRizzer ctxrizz.DbContextRizzer,
-) Service {
-	return &serviceImpl{
+) EmployeeService {
+	return &employeeServiceImpl{
 		repo:     repo,
 		dbRizzer: dbRizzer,
 	}

@@ -3,14 +3,15 @@ package main
 import (
 	"github.com/JesseNicholas00/GogoManager/controllers"
 	authCtrl "github.com/JesseNicholas00/GogoManager/controllers/auth"
-  departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
+	departmentCtrl "github.com/JesseNicholas00/GogoManager/controllers/department"
 	employeeCtrl "github.com/JesseNicholas00/GogoManager/controllers/employee"
+	fileCtrl "github.com/JesseNicholas00/GogoManager/controllers/file"
 	"github.com/JesseNicholas00/GogoManager/middlewares"
 	authRepo "github.com/JesseNicholas00/GogoManager/repos/auth"
-  departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
+	departmentRepo "github.com/JesseNicholas00/GogoManager/repos/department"
 	employeeRepo "github.com/JesseNicholas00/GogoManager/repos/employee"
 	authSvc "github.com/JesseNicholas00/GogoManager/services/auth"
-  departmentSvc "github.com/JesseNicholas00/GogoManager/services/department"
+	departmentSvc "github.com/JesseNicholas00/GogoManager/services/department"
 	employeeSvc "github.com/JesseNicholas00/GogoManager/services/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/ctxrizz"
 	"github.com/JesseNicholas00/GogoManager/utils/logging"
@@ -41,20 +42,29 @@ func initControllers(
 		cfg.jwtSecretKey,
 		cfg.bcryptSaltCost,
 	)
-	authController := authCtrl.NewAuthController(authService)
+	authMw := middlewares.NewAuthMiddleware(authService)
+	authController := authCtrl.NewAuthController(authService, authMw)
 	ctrls = append(ctrls, authController)
 
-	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
-	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
-	departmentMw := middlewares.NewAuthMiddleware(authService)
-	departmentController := departmentCtrl.NewDepartmentController(departmentService, departmentMw)
-	ctrls = append(ctrls, departmentController)
-  
-  employeeRepository := employeeRepo.NewRepository(dbRizzer)
-	employeeService := employeeSvc.NewService(employeeRepository, dbRizzer)
+	employeeRepository := employeeRepo.NewRepository(dbRizzer)
+	employeeService := employeeSvc.NewEmployeeService(employeeRepository, dbRizzer)
 	employeeMw := middlewares.NewAuthMiddleware(authService)
 	employeeController := employeeCtrl.NewEmployeeController(employeeService, employeeMw)
 	ctrls = append(ctrls, employeeController)
+
+	userMw := middlewares.NewAuthMiddleware(authService)
+
+	imageController := fileCtrl.NewImageController(
+		uploader,
+		cfg.awsS3BucketName,
+		userMw,
+	)
+
+	ctrls = append(ctrls, imageController)
+	departmentRepository := departmentRepo.NewDepartmentRepository(dbRizzer)
+	departmentService := departmentSvc.NewDepartmentService(departmentRepository, dbRizzer)
+	departmentController := departmentCtrl.NewDepartmentController(departmentService, authMw)
+	ctrls = append(ctrls, departmentController)
 
 	return
 }

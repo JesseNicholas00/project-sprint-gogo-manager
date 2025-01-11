@@ -7,9 +7,10 @@ import (
 	"github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
+	"github.com/google/uuid"
 )
 
-func (s *serviceImpl) DeleteEmployee(ctx context.Context, req DeleteEmployeeReq) error {
+func (s *employeeServiceImpl) DeleteEmployee(ctx context.Context, req DeleteEmployeeReq, userId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -22,7 +23,7 @@ func (s *serviceImpl) DeleteEmployee(ctx context.Context, req DeleteEmployeeReq)
 	return transaction.RunWithAutoCommit(&sess, func() error {
 		err = s.repo.DeleteEmployee(ctx, employee.Employee{
 			IdentityNumber: req.IdentityNumber,
-		})
+		}, userId)
 		if err != nil {
 			switch {
 			case errors.Is(err, employee.ErrEmployeeNotFound):

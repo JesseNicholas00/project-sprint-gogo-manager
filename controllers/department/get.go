@@ -16,7 +16,7 @@ func (ctrl *departmentController) getDepartment(ctx echo.Context) error {
 		return err
 	}
 
-	if req.Limit == nil || *req.Limit < 0 {
+	if req.Limit == nil || *req.Limit <= 0 {
 		req.Limit = new(int)
 		*req.Limit = 5
 	}

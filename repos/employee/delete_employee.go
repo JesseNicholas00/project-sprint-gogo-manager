@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
+	"github.com/google/uuid"
 )
 
-func (repo *repositoryEmployeeImpl) DeleteEmployee(ctx context.Context, employee Employee) error {
+func (repo *repositoryEmployeeImpl) DeleteEmployee(ctx context.Context, employee Employee, userId uuid.UUID) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -16,7 +17,7 @@ func (repo *repositoryEmployeeImpl) DeleteEmployee(ctx context.Context, employee
 		return errorutil.AddCurrentContext(err)
 	}
 
-	result, err := sess.NamedStmt(ctx, repo.statements.delete).Exec(employee)
+	result, err := sess.Stmt(ctx, repo.statements.delete).Exec(employee.IdentityNumber, userId)
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}

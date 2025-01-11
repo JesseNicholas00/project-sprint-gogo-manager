@@ -1,8 +1,8 @@
 CREATE TABLE employees
 (
-    identity_number VARCHAR(33) NOT NULL UNIQUE PRIMARY KEY,
+    identity_number VARCHAR(33),
     name VARCHAR(33) NOT NULL,
-    employee_image_uri VARCHAR(255) NOT NULL,
+    employee_image_uri TEXT,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
     department_id UUID REFERENCES departments(department_id) ON DELETE CASCADE,
     user_id TEXT REFERENCES users(user_id) ON DELETE CASCADE
