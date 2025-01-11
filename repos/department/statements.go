@@ -7,9 +7,9 @@ import (
 
 type statements struct {
 	add               *sqlx.NamedStmt
-	update       *sqlx.NamedStmt
+	update            *sqlx.NamedStmt
 	get               *sqlx.NamedStmt
-	getById      *sqlx.NamedStmt
+	getById           *sqlx.NamedStmt
 	searchByName      *sqlx.NamedStmt
 	delete            *sqlx.NamedStmt
 	isContainEmployee *sqlx.Stmt
