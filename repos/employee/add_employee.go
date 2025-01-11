@@ -18,10 +18,15 @@ func (r *repositoryEmployeeImpl) AddEmployee(ctx context.Context, employee Emplo
 		return err
 	}
 
-	row := sess.NamedStmt(ctx, r.statements.add).QueryRowx(employee)
-
-	var res Employee
-	err = row.StructScan(&res)
+	_, err = sess.
+		Stmt(ctx, r.statements.add).
+		QueryxContext(ctx, employee.IdentityNumber,
+			employee.Name,
+			employee.EmployeeImageUri,
+			employee.Gender,
+			employee.DepartmentId,
+			userId,
+		)
 	if err != nil {
 		err = errorutil.AddCurrentContext(err)
 		return err

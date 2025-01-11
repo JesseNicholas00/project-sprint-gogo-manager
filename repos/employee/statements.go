@@ -6,7 +6,8 @@ import (
 )
 
 type statements struct {
-	add                   *sqlx.NamedStmt
+	add                   *sqlx.Stmt
+	delete                *sqlx.Stmt
 	getByIdentityNumber   *sqlx.Stmt
 	update                *sqlx.Stmt
 	isIdentityNumberExist *sqlx.Stmt
@@ -14,13 +15,17 @@ type statements struct {
 
 func prepareStatements() statements {
 	return statements{
-		add: statementutil.MustPrepareNamed(`
+		add: statementutil.MustPrepare(`
 			INSERT INTO employees (identity_number, name, employee_image_uri, gender, department_id, user_id)
-			VALUES (:identity_number, :name, :employee_image_uri, :gender, :department_id, :user_id)
+			VALUES ($1, $2, $3, $4, $5, $6)
 			RETURNING identity_number, name, employee_image_uri, gender, department_id
 		`),
+		delete: statementutil.MustPrepare(`
+			DELETE FROM employees
+			WHERE identity_number = $1 and user_id = $2
+		`),
 		getByIdentityNumber: statementutil.MustPrepare(`
-			SELECT *
+			SELECT identity_number, name, employee_image_uri, gender, department_id
 			FROM employees
 			WHERE identity_number = $1 and user_id = $2
 		`),

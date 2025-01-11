@@ -18,6 +18,7 @@ func (c *employeeController) Register(server *echo.Echo) error {
 	g.GET("", c.getEmployeeByFilters)
 	g.POST("", c.addEmployee)
 	g.PATCH("/:identityNumber", c.updateEmployee)
+	g.DELETE("/:identityNumber", c.deleteEmployee)
 
 	return nil
 }

@@ -17,9 +17,11 @@ func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params G
 		Limit:         *params.Limit,
 		Offset:        *params.Offset,
 		Name:          params.Name,
-		DepartementId: *params.DepartementId,
+		Gender:        params.Gender,
+		DepartementId: params.DepartementId,
 		UserId:        userId,
 	})
+
 	if err != nil {
 		return errorutil.AddCurrentContext(err)
 	}

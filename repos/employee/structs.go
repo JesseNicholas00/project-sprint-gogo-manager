@@ -16,6 +16,6 @@ type FilterEmployee struct {
 	IdentityNumber string `db:"identity_number"`
 	Name           string `db:"name"`
 	Gender         string `db:"gender"`
-	DepartementId  int    `db:"department_id"`
+	DepartementId  string `db:"department_id"`
 	UserId         string `db:"user_id"`
 }

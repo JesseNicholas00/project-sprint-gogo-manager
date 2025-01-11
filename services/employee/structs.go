@@ -3,12 +3,12 @@ package employee
 import "github.com/google/uuid"
 
 type GetEmployeeReq struct {
-	Limit          *int   `json:"limit"`
-	Offset         *int   `json:"offset"`
-	IdentityNumber string `json:"identityNumber"`
-	Name           string `json:"name"`
-	Gender         string `json:"gender"`
-	DepartementId  *int   `json:"departmentId"`
+	Limit          *int   `json:"limit" query:"limit"`
+	Offset         *int   `json:"offset" query:"offset"`
+	IdentityNumber string `json:"identityNumber" query:"identityNumber"`
+	Name           string `json:"name" query:"name"`
+	Gender         string `json:"gender" query:"gender"`
+	DepartementId  string `json:"departmentId" query:"departmentId"`
 }
 
 type GetEmployeeResp []AddEmployeeRes
@@ -38,4 +38,8 @@ type AddEmployeeRes struct {
 	EmployeeImageUri string    `json:"employeeImageUri"`
 	Gender           string    `json:"gender"`
 	DepartmentId     uuid.UUID `json:"departmentId"`
+}
+
+type DeleteEmployeeReq struct {
+	IdentityNumber string `param:"identityNumber"`
 }

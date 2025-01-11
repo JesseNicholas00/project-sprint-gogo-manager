@@ -28,13 +28,13 @@ func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filte
 
 	if filter.Gender != "" {
 		conditions = append(conditions,
-			mewsql.WithCondition("gender = ?", filter),
+			mewsql.WithCondition("gender = ?", filter.Gender),
 		)
 	}
 
-	if filter.DepartementId > 0 {
+	if filter.DepartementId != "" {
 		conditions = append(conditions,
-			mewsql.WithCondition("departement_id = ?", filter.DepartementId),
+			mewsql.WithCondition("department_id = ?", filter.DepartementId),
 		)
 	}
 
@@ -47,7 +47,7 @@ func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filte
 	}
 
 	sql, args := mewsql.Select(
-		`identity_number, name, employee_image_uri, gender, departement_id`,
+		`identity_number, name, employee_image_uri, gender, department_id`,
 		"employees",
 		options...,
 	)
