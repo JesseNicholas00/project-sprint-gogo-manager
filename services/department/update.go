@@ -21,6 +21,9 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req Upda
 	// Update department
 	// Return the request if request body is nil
 	if req.Name == nil {
+		res.Name = department.Name
+		res.DepartmentId = departmentId
+
 		return nil
 	}
 
