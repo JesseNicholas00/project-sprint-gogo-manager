@@ -17,6 +17,7 @@ func (ctrl *departmentController) Register(server *echo.Echo) error {
 
 	g.POST("", ctrl.addDepartment)
 	g.GET("", ctrl.getDepartment)
+	g.PATCH("/:departmentId", ctrl.updateDepartment)
 	g.DELETE("/:departmentId", ctrl.deleteDepartment)
 
 	return nil

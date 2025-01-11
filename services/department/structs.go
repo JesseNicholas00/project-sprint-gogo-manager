@@ -11,6 +11,10 @@ type AddDepartmentRes struct {
 	Name         string    `json:"name"`
 }
 
+type UpdateDepartmentReq struct {
+	Name *string `json:"name" validate:"min=4,max=33"`
+}
+
 type GetDepartmentParams struct {
 	Limit  *int   `query:"limit"`
 	Offset *int   `query:"offset"`
