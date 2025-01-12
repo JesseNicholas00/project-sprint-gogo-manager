@@ -1,6 +1,7 @@
 package image
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -12,20 +13,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const maxSize int64 = 100 << 10 // 100 KiB
-const minSize int64 = 10 << 10  // 10 KiB
+const maxSize int64 = 101 << 10 // 100 KiB with padding
 
 func (ctrl *imageController) uploadFile(c echo.Context) error {
 	mpf, err := c.MultipartForm()
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
-			"message": "image is wrong",
+			"message": "image failed to upload",
 		})
 	}
 	files := mpf.File["file"]
 	if len(files) == 0 {
 		return c.JSON(http.StatusBadRequest, echo.Map{
-			"message": "image is wrong",
+			"message": "image is an empty file",
 		})
 	}
 	file := files[0]
@@ -34,12 +34,13 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 	fileType := strings.ToLower(fileParts[len(fileParts)-1])
 	if fileType != "jpg" && fileType != "jpeg" && fileType != "png" {
 		return c.JSON(http.StatusBadRequest, echo.Map{
-			"message": "image is wrong",
+			"message": "image file type is wrong",
 		})
 	}
-	if file.Size < minSize || file.Size > maxSize {
+	fmt.Println(file.Size)
+	if file.Size > maxSize {
 		return c.JSON(http.StatusBadRequest, echo.Map{
-			"message": "image is wrong",
+			"message": "image file size is wrong",
 		})
 	}
 
