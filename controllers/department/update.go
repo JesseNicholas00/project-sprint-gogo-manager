@@ -16,7 +16,9 @@ func (ctrl *departmentController) updateDepartment(ctx echo.Context) error {
 	// Get path variable (departmentId)
 	departmentId, err := uuid.Parse(ctx.Param("departmentId"))
 	if err != nil {
-		return errorutil.AddCurrentContext(err)
+		return echo.NewHTTPError(http.StatusNotFound, echo.Map{
+			"message": "invalid id",
+		})
 	}
 
 	// Get user ID (this is manager ID)
