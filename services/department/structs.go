@@ -12,7 +12,7 @@ type AddDepartmentRes struct {
 }
 
 type UpdateDepartmentReq struct {
-	Name *string `json:"name" validate:"omitnil,min=4,max=33"`
+	Name *string `json:"name" validate:"min=4,max=33"`
 }
 
 type GetDepartmentParams struct {
