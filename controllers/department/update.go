@@ -1,6 +1,7 @@
 package department
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/GogoManager/services/auth"
@@ -36,7 +37,14 @@ func (ctrl *departmentController) updateDepartment(ctx echo.Context) error {
 
 	// Update found department
 	if err = ctrl.service.UpdateDepartment(ctx.Request().Context(), req, &res, departmentId, managerId); err != nil {
-		return errorutil.AddCurrentContext(err)
+		switch {
+		case errors.Is(err, department.ErrDepartmentNotFound):
+			return echo.NewHTTPError(http.StatusNotFound, echo.Map{
+				"message": "department not found",
+			})
+		default:
+			return errorutil.AddCurrentContext(err)
+		}
 	}
 
 	return ctx.JSON(http.StatusOK, res)

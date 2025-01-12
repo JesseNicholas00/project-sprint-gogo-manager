@@ -2,7 +2,9 @@ package department
 
 import (
 	"context"
+	"errors"
 
+	repo "github.com/JesseNicholas00/GogoManager/repos/department"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/google/uuid"
 )
@@ -14,7 +16,10 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req Upda
 
 	// Get department by ID
 	department, err := svc.repo.GetDepartmentById(ctx, departmentId, managerId)
-	if err != nil {
+	switch {
+	case errors.Is(err, repo.ErrDepartmentNotFound):
+		return ErrDepartmentNotFound
+	case err != nil:
 		return errorutil.AddCurrentContext(err)
 	}
 
