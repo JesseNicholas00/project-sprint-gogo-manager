@@ -31,11 +31,14 @@ func (r *repositoryEmployeeImpl) UpdateEmployee(ctx context.Context, employee Em
 		err = errorutil.AddCurrentContext(err)
 		return
 	}
+	defer rows.Close()
 
-	err = rows.StructScan(&res)
-	if err != nil {
-		err = errorutil.AddCurrentContext(err)
-		return
+	for rows.Next() {
+		err = rows.StructScan(&res)
+		if err != nil {
+			err = errorutil.AddCurrentContext(err)
+			return
+		}
 	}
 
 	return employee, nil
