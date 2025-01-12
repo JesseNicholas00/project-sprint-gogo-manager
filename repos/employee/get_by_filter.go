@@ -2,7 +2,6 @@ package employee
 
 import (
 	"context"
-
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/mewsql"
 )
@@ -16,7 +15,7 @@ func (r *repositoryEmployeeImpl) GetEmployeeByFilters(ctx context.Context, filte
 
 	if filter.IdentityNumber != "" {
 		conditions = append(conditions,
-			mewsql.WithCondition("identity_number ILIKE ?", "%"+filter.IdentityNumber),
+			mewsql.WithCondition("identity_number ILIKE ?", filter.IdentityNumber+"%"),
 		)
 	}
 

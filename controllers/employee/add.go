@@ -1,7 +1,7 @@
 package employee
 
 import (
-	"log"
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/GogoManager/services/auth"
@@ -31,7 +31,6 @@ func (ctrl *employeeController) addEmployee(ctx echo.Context) error {
 		return errorutil.AddCurrentContext(err)
 	}
 	if exists {
-		log.Println("ctrl: identity number already exists")
 		return echo.NewHTTPError(409, echo.Map{
 			"message": "identity number already exists",
 		})
@@ -40,7 +39,14 @@ func (ctrl *employeeController) addEmployee(ctx echo.Context) error {
 	res := employee.AddEmployeeRes{}
 
 	if err := ctrl.service.AddEmployee(ctx.Request().Context(), req, &res, managerId); err != nil {
-		return errorutil.AddCurrentContext(err)
+		switch {
+		case errors.Is(err, employee.ErrDepartmentNotFound):
+			return ctx.JSON(http.StatusBadRequest, echo.Map{
+				"message": "Department not found",
+			})
+		default:
+			return errorutil.AddCurrentContext(err)
+		}
 	}
 
 	return ctx.JSON(http.StatusCreated, res)

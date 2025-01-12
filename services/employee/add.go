@@ -2,6 +2,7 @@ package employee
 
 import (
 	"context"
+	"errors"
 
 	"github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
@@ -21,7 +22,10 @@ func (s *employeeServiceImpl) AddEmployee(ctx context.Context, req AddEmployeeRe
 		DepartmentId:     req.DepartmentId,
 	}, userId)
 
-	if err != nil {
+	switch {
+	case errors.Is(err, employee.ErrDepartmentNotFound):
+		return ErrDepartmentNotFound
+	case err != nil:
 		return errorutil.AddCurrentContext(err)
 	}
 

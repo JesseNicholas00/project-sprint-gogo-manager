@@ -14,12 +14,13 @@ func (e *employeeServiceImpl) GetEmployeeByFilters(ctx context.Context, params G
 	}
 
 	employees, err := e.repo.GetEmployeeByFilters(ctx, employee.FilterEmployee{
-		Limit:         *params.Limit,
-		Offset:        *params.Offset,
-		Name:          params.Name,
-		Gender:        params.Gender,
-		DepartementId: params.DepartementId,
-		UserId:        userId,
+		Limit:          *params.Limit,
+		Offset:         *params.Offset,
+		IdentityNumber: params.IdentityNumber,
+		Name:           params.Name,
+		Gender:         params.Gender,
+		DepartementId:  params.DepartementId,
+		UserId:         userId,
 	})
 
 	if err != nil {
