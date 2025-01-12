@@ -6,4 +6,5 @@ var (
 	ErrEmployeeNotFound            = errors.New("employeeService: no such employee found")
 	ErrIdentityNumberNotFound      = errors.New("employeeService: no such identity number found")
 	ErrIdentityNumberAlreadyExists = errors.New("employeeService: identity number already exists")
+	ErrDepartmentNotFound          = errors.New("employeeService: no such department found")
 )
