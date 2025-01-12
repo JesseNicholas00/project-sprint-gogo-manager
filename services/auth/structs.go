@@ -16,11 +16,11 @@ type AuthenticateUserRes struct {
 }
 
 type UpdateUserReq struct {
-	Email           *string `json:"email"    validate:"email"`
-	Name            *string `json:"name"    validate:"min=4,max=52"`
-	UserImageUri    *string `json:"userImageUri"    validate:"url"`
-	CompanyName     *string `json:"companyName"    validate:"min=4,max=52"`
-	CompanyImageUri *string `json:"companyImageUri"    validate:"url"`
+	Email           *string `json:"email" validate:"omitnil,email"`
+	Name            *string `json:"name" validate:"omitnil,min=4,max=52"`
+	UserImageUri    *string `json:"userImageUri" validate:"omitnil,url"`
+	CompanyName     *string `json:"companyName" validate:"omitnil,min=4,max=52"`
+	CompanyImageUri *string `json:"companyImageUri" validate:"omitnil,url"`
 }
 
 type UpdateUserRes struct {
