@@ -12,8 +12,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const maxSize int64 = 20 << 20
-const minSize int64 = 10 << 10
+const maxSize int64 = 100 << 10 // 100 KiB
+const minSize int64 = 10 << 10  // 10 KiB
 
 func (ctrl *imageController) uploadFile(c echo.Context) error {
 	mpf, err := c.MultipartForm()
@@ -31,8 +31,8 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 	file := files[0]
 
 	fileParts := strings.Split(file.Filename, ".")
-	fileType := fileParts[len(fileParts)-1]
-	if fileType != "jpg" && fileType != "jpeg" {
+	fileType := strings.ToLower(fileParts[len(fileParts)-1])
+	if fileType != "jpg" && fileType != "jpeg" && fileType != "png" {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"message": "image is wrong",
 		})
