@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/JesseNicholas00/GogoManager/types/optional"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -16,11 +17,11 @@ type AuthenticateUserRes struct {
 }
 
 type UpdateUserReq struct {
-	Email           *string `json:"email" validate:"omitnil,email"`
-	Name            *string `json:"name" validate:"omitnil,min=4,max=52"`
-	UserImageUri    *string `json:"userImageUri" validate:"omitnil,url"`
-	CompanyName     *string `json:"companyName" validate:"omitnil,min=4,max=52"`
-	CompanyImageUri *string `json:"companyImageUri" validate:"omitnil,url"`
+	Email           optional.OptionalStr `json:"email" validate:"omitnil,email"`
+	Name            optional.OptionalStr `json:"name" validate:"omitnil,min=4,max=52"`
+	UserImageUri    optional.OptionalStr `json:"userImageUri" validate:"omitnil,url"`
+	CompanyName     optional.OptionalStr `json:"companyName" validate:"omitnil,min=4,max=52"`
+	CompanyImageUri optional.OptionalStr `json:"companyImageUri" validate:"omitnil,url"`
 }
 
 type UpdateUserRes struct {

@@ -25,14 +25,14 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req Upda
 
 	// Update department
 	// Return the request if request body is nil
-	if req.Name == nil {
+	if req.Name.V == nil {
 		res.Name = department.Name
 		res.DepartmentId = departmentId
 
 		return nil
 	}
 
-	department.Name = *req.Name
+	department.Name = *req.Name.V
 
 	err = svc.repo.UpdateDepartment(ctx, *department)
 
@@ -42,7 +42,7 @@ func (svc *departmentServiceImpl) UpdateDepartment(ctx context.Context, req Upda
 
 	*res = AddDepartmentRes{
 		DepartmentId: departmentId,
-		Name:         *req.Name,
+		Name:         *req.Name.V,
 	}
 
 	return nil

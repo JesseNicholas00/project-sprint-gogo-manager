@@ -1,6 +1,9 @@
 package department
 
-import "github.com/google/uuid"
+import (
+	"github.com/JesseNicholas00/GogoManager/types/optional"
+	"github.com/google/uuid"
+)
 
 type AddDepartmentReq struct {
 	Name string `json:"name" validate:"required,min=4,max=33"`
@@ -12,7 +15,7 @@ type AddDepartmentRes struct {
 }
 
 type UpdateDepartmentReq struct {
-	Name *string `json:"name" validate:"min=4,max=33"`
+	Name optional.OptionalStr `json:"name" validate:"omitnil,min=4,max=33"`
 }
 
 type GetDepartmentParams struct {

@@ -30,8 +30,8 @@ func (svc *authServiceImpl) UpdateUser(
 			return errorutil.AddCurrentContext(err)
 		}
 
-		if req.Email != nil {
-			_, err := svc.repo.FindUserByEmail(ctx, *req.Email)
+		if req.Email.V != nil {
+			_, err := svc.repo.FindUserByEmail(ctx, *req.Email.V)
 
 			if err == nil {
 				return ErrEmailAlreadyRegistered
@@ -42,19 +42,19 @@ func (svc *authServiceImpl) UpdateUser(
 				return errorutil.AddCurrentContext(err)
 			}
 
-			updatedUser.Email = *req.Email
+			updatedUser.Email = *req.Email.V
 		}
-		if req.Name != nil {
-			updatedUser.Name = *req.Name
+		if req.Name.V != nil {
+			updatedUser.Name = *req.Name.V
 		}
-		if req.UserImageUri != nil {
-			updatedUser.UserImageUri = *req.UserImageUri
+		if req.UserImageUri.V != nil {
+			updatedUser.UserImageUri = *req.UserImageUri.V
 		}
-		if req.CompanyName != nil {
-			updatedUser.CompanyName = *req.CompanyName
+		if req.CompanyName.V != nil {
+			updatedUser.CompanyName = *req.CompanyName.V
 		}
-		if req.CompanyImageUri != nil {
-			updatedUser.CompanyImageUri = *req.CompanyImageUri
+		if req.CompanyImageUri.V != nil {
+			updatedUser.CompanyImageUri = *req.CompanyImageUri.V
 		}
 
 		savedUser, err := svc.repo.UpdateUser(ctx, updatedUser)
