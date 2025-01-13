@@ -26,12 +26,12 @@ type AddEmployeeReq struct {
 }
 
 type UpdateEmployeeReq struct {
-	IdentityNumber      optional.OptionalStr `json:"identityNumber" validate:"omitnil,min=5,max=33"`
-	Name                optional.OptionalStr `json:"name" validate:"omitnil,min=4,max=33"`
-	EmployeeImageUri    optional.OptionalStr `json:"employeeImageUri" validate:"omitnil,complete_uri"`
-	Gender              optional.OptionalStr `json:"gender" validate:"omitnil,oneof=male female"`
-	DepartmentId        *uuid.UUID           `json:"departmentId"`
-	UserID              string               `json:"userId"`
+	IdentityNumber      optional.OptionalStr  `json:"identityNumber" validate:"omitnil,min=5,max=33"`
+	Name                optional.OptionalStr  `json:"name" validate:"omitnil,min=4,max=33"`
+	EmployeeImageUri    optional.OptionalStr  `json:"employeeImageUri" validate:"omitnil,complete_uri"`
+	Gender              optional.OptionalStr  `json:"gender" validate:"omitnil,oneof=male female"`
+	DepartmentId        optional.OptionalUUID `json:"departmentId" validate:"omitnil"`
+	UserID              string                `json:"userId"`
 	ParamIdentityNumber string
 }
 

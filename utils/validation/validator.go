@@ -41,6 +41,10 @@ var customTypes = []customType{
 		Type:      types.OptionalStr{},
 		Validator: optional.ValidateOptionalString,
 	},
+	{
+		Type:      types.OptionalUUID{},
+		Validator: optional.ValidateOptionalUUID,
+	},
 }
 
 type customType struct {

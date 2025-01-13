@@ -3,7 +3,6 @@ package employee
 import (
 	"context"
 	"errors"
-
 	repoEmployee "github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
@@ -62,8 +61,8 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 			employee.Gender = *req.Gender.V
 		}
 
-		if req.DepartmentId != nil {
-			employee.DepartmentId = *req.DepartmentId
+		if req.DepartmentId.V != nil {
+			employee.DepartmentId = *req.DepartmentId.V
 		}
 
 		result, err := svc.repo.UpdateEmployee(ctx, employee, req.ParamIdentityNumber, req.UserID)
