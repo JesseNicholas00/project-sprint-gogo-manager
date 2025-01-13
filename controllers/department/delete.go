@@ -5,7 +5,6 @@ import (
 	"github.com/JesseNicholas00/GogoManager/services/auth"
 	"github.com/JesseNicholas00/GogoManager/services/department"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
-	"github.com/JesseNicholas00/GogoManager/utils/request"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -13,8 +12,15 @@ import (
 
 func (ctrl *departmentController) deleteDepartment(ctx echo.Context) error {
 	req := department.DeleteDepartmentReq{}
-	if err := request.BindAndValidate(ctx, &req); err != nil {
-		return err
+
+	var err error
+	departmentId := ctx.Param("departmentId")
+
+	req.DepartmentId, err = uuid.Parse(departmentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, echo.Map{
+			"message": "department not found",
+		})
 	}
 
 	userId := ctx.Get("session").(auth.GetSessionFromTokenRes).UserId
