@@ -19,9 +19,9 @@ type AuthenticateUserRes struct {
 type UpdateUserReq struct {
 	Email           optional.OptionalStr `json:"email" validate:"omitnil,email"`
 	Name            optional.OptionalStr `json:"name" validate:"omitnil,min=4,max=52"`
-	UserImageUri    optional.OptionalStr `json:"userImageUri" validate:"omitnil,url"`
+	UserImageUri    optional.OptionalStr `json:"userImageUri" validate:"omitnil,complete_uri"`
 	CompanyName     optional.OptionalStr `json:"companyName" validate:"omitnil,min=4,max=52"`
-	CompanyImageUri optional.OptionalStr `json:"companyImageUri" validate:"omitnil,url"`
+	CompanyImageUri optional.OptionalStr `json:"companyImageUri" validate:"omitnil,complete_uri"`
 }
 
 type UpdateUserRes struct {

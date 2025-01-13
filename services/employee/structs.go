@@ -19,7 +19,7 @@ type GetEmployeeResp []AddEmployeeRes
 type AddEmployeeReq struct {
 	IdentityNumber   string    `json:"identityNumber" validate:"required,min=5,max=33"`
 	Name             string    `json:"name" validate:"required,min=4,max=33"`
-	EmployeeImageUri string    `json:"employeeImageUri" validate:"required,url"`
+	EmployeeImageUri string    `json:"employeeImageUri" validate:"required,complete_uri"`
 	Gender           string    `json:"gender" validate:"required,oneof=male female"`
 	DepartmentId     uuid.UUID `json:"departmentId" validate:"required"`
 	UserID           uuid.UUID `json:"userId"`
@@ -28,7 +28,7 @@ type AddEmployeeReq struct {
 type UpdateEmployeeReq struct {
 	IdentityNumber      optional.OptionalStr `json:"identityNumber" validate:"omitnil,min=5,max=33"`
 	Name                optional.OptionalStr `json:"name" validate:"omitnil,min=4,max=33"`
-	EmployeeImageUri    optional.OptionalStr `json:"employeeImageUri" validate:"omitnil,url"`
+	EmployeeImageUri    optional.OptionalStr `json:"employeeImageUri" validate:"omitnil,complete_uri"`
 	Gender              optional.OptionalStr `json:"gender" validate:"omitnil,oneof=male female"`
 	DepartmentId        *uuid.UUID           `json:"departmentId"`
 	UserID              string               `json:"userId"`

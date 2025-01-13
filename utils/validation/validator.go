@@ -3,6 +3,7 @@ package validation
 import (
 	types "github.com/JesseNicholas00/GogoManager/types/optional"
 	"github.com/JesseNicholas00/GogoManager/utils/validation/optional"
+	"github.com/JesseNicholas00/GogoManager/utils/validation/uri"
 	"reflect"
 	"strings"
 
@@ -23,6 +24,10 @@ var customFields = []customField{
 	{
 		Tag:       "imageExt",
 		Validator: image.ValidateImageExtension,
+	},
+	{
+		Tag:       "complete_uri",
+		Validator: uri.ValidateCompleteURI,
 	},
 }
 
