@@ -1,14 +1,18 @@
 package image
 
 import (
+	"context"
 	"fmt"
+	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"mime/multipart"
 	"net/http"
 	"strings"
 
 	"github.com/JesseNicholas00/GogoManager/services/image"
-	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
@@ -44,24 +48,30 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 		})
 	}
 
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
-	params := &s3.PutObjectInput{
-		Bucket: aws.String(ctrl.bucket),
-		Key:    aws.String(uuid.NewString() + "." + fileType),
-		Body:   src,
-	}
+	filename := uuid.NewString() + "." + fileType
+	uri := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", ctrl.bucket, ctrl.region, filename)
 
-	result, err := ctrl.service.Upload(c.Request().Context(), params)
-	if err != nil {
-		return errorutil.AddCurrentContext(err)
-	}
+	go func(uploader *manager.Uploader, file *multipart.FileHeader, bucket, name string) {
+		src, err := file.Open()
+		if err != nil {
+			fmt.Println(errorutil.AddCurrentContext(err))
+		}
+		defer src.Close()
+		params := &s3.PutObjectInput{
+			Bucket: aws.String(bucket),
+			Key:    aws.String(name),
+			Body:   src,
+			ACL:    types.ObjectCannedACLPublicRead, // Allowed public read
+		}
+
+		_, err = uploader.Upload(context.Background(), params)
+		if err != nil {
+			fmt.Println(errorutil.AddCurrentContext(err))
+		}
+	}(ctrl.service, file, ctrl.bucket, filename)
 
 	res := image.UploadImageRes{
-		Uri: result.Location,
+		Uri: uri,
 	}
 	return c.JSON(http.StatusOK, res)
 }

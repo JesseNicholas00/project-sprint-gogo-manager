@@ -57,6 +57,7 @@ func initControllers(
 	imageController := fileCtrl.NewImageController(
 		uploader,
 		cfg.awsS3BucketName,
+		cfg.awsRegion,
 		userMw,
 	)
 
