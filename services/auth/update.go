@@ -30,7 +30,7 @@ func (svc *authServiceImpl) UpdateUser(
 			return errorutil.AddCurrentContext(err)
 		}
 
-		if req.Email.V != nil {
+		if req.Email.V != nil && *req.Email.V != updatedUser.Email {
 			_, err := svc.repo.FindUserByEmail(ctx, *req.Email.V)
 
 			if err == nil {
