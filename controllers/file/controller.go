@@ -10,6 +10,7 @@ import (
 type imageController struct {
 	service *manager.Uploader
 	bucket  string
+	region  string
 	authMw  middlewares.Middleware
 }
 
@@ -24,11 +25,13 @@ func (ctrl *imageController) Register(server *echo.Echo) error {
 func NewImageController(
 	service *manager.Uploader,
 	bucket string,
+	region string,
 	authMw middlewares.Middleware,
 ) controllers.Controller {
 	return &imageController{
 		service: service,
 		bucket:  bucket,
+		region:  region,
 		authMw:  authMw,
 	}
 }
