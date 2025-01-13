@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-
 	"github.com/JesseNicholas00/GogoManager/repos/auth"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
@@ -25,37 +24,37 @@ func (svc *authServiceImpl) UpdateUser(
 	}
 
 	return transaction.RunWithAutoCommit(&sess, func() error {
-		_, err := svc.repo.FindUserByEmail(ctx, *req.Email)
-
-		if err == nil {
-			return ErrEmailAlreadyRegistered
-		}
-
-		if !errors.Is(err, auth.ErrEmailNotFound) {
-			// unexpected kind of error
-			return errorutil.AddCurrentContext(err)
-		}
-
 		updatedUser, err := svc.repo.FindUserByUserId(ctx, userId)
 
 		if err != nil {
 			return errorutil.AddCurrentContext(err)
 		}
 
-		if req.Email != nil {
-			updatedUser.Email = *req.Email
+		if req.Email.V != nil && *req.Email.V != updatedUser.Email {
+			_, err := svc.repo.FindUserByEmail(ctx, *req.Email.V)
+
+			if err == nil {
+				return ErrEmailAlreadyRegistered
+			}
+
+			if !errors.Is(err, auth.ErrEmailNotFound) {
+				// unexpected kind of error
+				return errorutil.AddCurrentContext(err)
+			}
+
+			updatedUser.Email = *req.Email.V
 		}
-		if req.Name != nil {
-			updatedUser.Name = *req.Name
+		if req.Name.V != nil {
+			updatedUser.Name = *req.Name.V
 		}
-		if req.UserImageUri != nil {
-			updatedUser.UserImageUri = *req.UserImageUri
+		if req.UserImageUri.V != nil {
+			updatedUser.UserImageUri = *req.UserImageUri.V
 		}
-		if req.CompanyName != nil {
-			updatedUser.CompanyName = *req.CompanyName
+		if req.CompanyName.V != nil {
+			updatedUser.CompanyName = *req.CompanyName.V
 		}
-		if req.CompanyImageUri != nil {
-			updatedUser.CompanyImageUri = *req.CompanyImageUri
+		if req.CompanyImageUri.V != nil {
+			updatedUser.CompanyImageUri = *req.CompanyImageUri.V
 		}
 
 		savedUser, err := svc.repo.UpdateUser(ctx, updatedUser)

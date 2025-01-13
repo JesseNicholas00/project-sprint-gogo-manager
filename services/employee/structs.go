@@ -1,6 +1,9 @@
 package employee
 
-import "github.com/google/uuid"
+import (
+	"github.com/JesseNicholas00/GogoManager/types/optional"
+	"github.com/google/uuid"
+)
 
 type GetEmployeeReq struct {
 	Limit          *int   `json:"limit" query:"limit"`
@@ -16,19 +19,19 @@ type GetEmployeeResp []AddEmployeeRes
 type AddEmployeeReq struct {
 	IdentityNumber   string    `json:"identityNumber" validate:"required,min=5,max=33"`
 	Name             string    `json:"name" validate:"required,min=4,max=33"`
-	EmployeeImageUri string    `json:"employeeImageUri" validate:"required,url"`
+	EmployeeImageUri string    `json:"employeeImageUri" validate:"required,complete_uri"`
 	Gender           string    `json:"gender" validate:"required,oneof=male female"`
 	DepartmentId     uuid.UUID `json:"departmentId" validate:"required"`
 	UserID           uuid.UUID `json:"userId"`
 }
 
 type UpdateEmployeeReq struct {
-	IdentityNumber      *string    `json:"identityNumber" validate:"omitnil,min=5,max=33"`
-	Name                *string    `json:"name" validate:"omitnil,min=4,max=33"`
-	EmployeeImageUri    *string    `json:"employeeImageUri" validate:"omitnil,url"`
-	Gender              *string    `json:"gender" validate:"omitnil,oneof=male female"`
-	DepartmentId        *uuid.UUID `json:"departmentId"`
-	UserID              string     `json:"userId"`
+	IdentityNumber      optional.OptionalStr  `json:"identityNumber" validate:"omitnil,min=5,max=33"`
+	Name                optional.OptionalStr  `json:"name" validate:"omitnil,min=4,max=33"`
+	EmployeeImageUri    optional.OptionalStr  `json:"employeeImageUri" validate:"omitnil,complete_uri"`
+	Gender              optional.OptionalStr  `json:"gender" validate:"omitnil,oneof=male female"`
+	DepartmentId        optional.OptionalUUID `json:"departmentId" validate:"omitnil"`
+	UserID              string                `json:"userId"`
 	ParamIdentityNumber string
 }
 

@@ -1,6 +1,9 @@
 package validation
 
 import (
+	types "github.com/JesseNicholas00/GogoManager/types/optional"
+	"github.com/JesseNicholas00/GogoManager/utils/validation/optional"
+	"github.com/JesseNicholas00/GogoManager/utils/validation/uri"
 	"reflect"
 	"strings"
 
@@ -22,11 +25,31 @@ var customFields = []customField{
 		Tag:       "imageExt",
 		Validator: image.ValidateImageExtension,
 	},
+	{
+		Tag:       "complete_uri",
+		Validator: uri.ValidateCompleteURI,
+	},
 }
 
 type customField struct {
 	Tag       string
 	Validator validator.Func
+}
+
+var customTypes = []customType{
+	{
+		Type:      types.OptionalStr{},
+		Validator: optional.ValidateOptionalString,
+	},
+	{
+		Type:      types.OptionalUUID{},
+		Validator: optional.ValidateOptionalUUID,
+	},
+}
+
+type customType struct {
+	Type      any
+	Validator validator.CustomTypeFunc
 }
 
 func NewEchoValidator() echo.Validator {
@@ -42,6 +65,10 @@ func NewEchoValidator() echo.Validator {
 
 	for _, customField := range customFields {
 		validator.RegisterValidation(customField.Tag, customField.Validator)
+	}
+
+	for _, customType := range customTypes {
+		validator.RegisterCustomTypeFunc(customType.Validator, customType.Type)
 	}
 
 	return &EchoValidator{

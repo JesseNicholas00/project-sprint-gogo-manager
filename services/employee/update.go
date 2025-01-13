@@ -3,7 +3,6 @@ package employee
 import (
 	"context"
 	"errors"
-
 	repoEmployee "github.com/JesseNicholas00/GogoManager/repos/employee"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
@@ -37,8 +36,8 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 			}
 		}
 
-		if req.IdentityNumber != nil && *req.IdentityNumber != employee.IdentityNumber {
-			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber, req.UserID)
+		if req.IdentityNumber.V != nil && *req.IdentityNumber.V != employee.IdentityNumber {
+			_, err := svc.repo.FindEmployeeByIdentityNumber(ctx, *req.IdentityNumber.V, req.UserID)
 			if err == nil {
 				return ErrIdentityNumberAlreadyExists
 			}
@@ -47,23 +46,23 @@ func (svc *employeeServiceImpl) UpdateEmployee(
 				return errorutil.AddCurrentContext(err)
 			}
 
-			employee.IdentityNumber = *req.IdentityNumber
+			employee.IdentityNumber = *req.IdentityNumber.V
 		}
 
-		if req.Name != nil {
-			employee.Name = *req.Name
+		if req.Name.V != nil {
+			employee.Name = *req.Name.V
 		}
 
-		if req.EmployeeImageUri != nil {
-			employee.EmployeeImageUri = *req.EmployeeImageUri
+		if req.EmployeeImageUri.V != nil {
+			employee.EmployeeImageUri = *req.EmployeeImageUri.V
 		}
 
-		if req.Gender != nil {
-			employee.Gender = *req.Gender
+		if req.Gender.V != nil {
+			employee.Gender = *req.Gender.V
 		}
 
-		if req.DepartmentId != nil {
-			employee.DepartmentId = *req.DepartmentId
+		if req.DepartmentId.V != nil {
+			employee.DepartmentId = *req.DepartmentId.V
 		}
 
 		result, err := svc.repo.UpdateEmployee(ctx, employee, req.ParamIdentityNumber, req.UserID)
