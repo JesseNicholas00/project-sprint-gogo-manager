@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-
 	"github.com/JesseNicholas00/GogoManager/repos/auth"
 	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
 	"github.com/JesseNicholas00/GogoManager/utils/transaction"
@@ -25,17 +24,6 @@ func (svc *authServiceImpl) UpdateUser(
 	}
 
 	return transaction.RunWithAutoCommit(&sess, func() error {
-		_, err := svc.repo.FindUserByEmail(ctx, *req.Email)
-
-		if err == nil {
-			return ErrEmailAlreadyRegistered
-		}
-
-		if !errors.Is(err, auth.ErrEmailNotFound) {
-			// unexpected kind of error
-			return errorutil.AddCurrentContext(err)
-		}
-
 		updatedUser, err := svc.repo.FindUserByUserId(ctx, userId)
 
 		if err != nil {
@@ -43,6 +31,17 @@ func (svc *authServiceImpl) UpdateUser(
 		}
 
 		if req.Email != nil {
+			_, err := svc.repo.FindUserByEmail(ctx, *req.Email)
+
+			if err == nil {
+				return ErrEmailAlreadyRegistered
+			}
+
+			if !errors.Is(err, auth.ErrEmailNotFound) {
+				// unexpected kind of error
+				return errorutil.AddCurrentContext(err)
+			}
+
 			updatedUser.Email = *req.Email
 		}
 		if req.Name != nil {
