@@ -1,7 +1,6 @@
 package image
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -37,7 +36,7 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 			"message": "image file type is wrong",
 		})
 	}
-	fmt.Println(file.Size)
+
 	if file.Size > maxSize {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"message": "image file size is wrong",
