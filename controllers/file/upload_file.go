@@ -3,14 +3,14 @@ package image
 import (
 	"context"
 	"fmt"
-	"github.com/JesseNicholas00/GogoManager/utils/errorutil"
+	"mime/multipart"
+	"net/http"
+	"strings"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"mime/multipart"
-	"net/http"
-	"strings"
 
 	"github.com/JesseNicholas00/GogoManager/services/image"
 	"github.com/google/uuid"
@@ -41,7 +41,6 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 			"message": "image file type is wrong",
 		})
 	}
-	fmt.Println(file.Size)
 	if file.Size > maxSize {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"message": "image file size is wrong",
@@ -54,7 +53,7 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 	go func(uploader *manager.Uploader, file *multipart.FileHeader, bucket, name string) {
 		src, err := file.Open()
 		if err != nil {
-			fmt.Println(errorutil.AddCurrentContext(err))
+			return
 		}
 		defer src.Close()
 		params := &s3.PutObjectInput{
@@ -66,7 +65,7 @@ func (ctrl *imageController) uploadFile(c echo.Context) error {
 
 		_, err = uploader.Upload(context.Background(), params)
 		if err != nil {
-			fmt.Println(errorutil.AddCurrentContext(err))
+			return
 		}
 	}(ctrl.service, file, ctrl.bucket, filename)
 
